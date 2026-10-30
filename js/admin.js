@@ -314,26 +314,26 @@ function renderAdminProjectsTable(projects) {
 
   tbody.innerHTML = projects.map((p, index) => {
     return `
-      <tr class="border-b border-slate-800/80 hover:bg-slate-800/40 transition-colors">
+      <tr class="border-b border-slate-100 hover:bg-slate-50/80 transition-colors">
         <!-- Thumbnail & Title -->
         <td class="px-6 py-4">
           <div class="flex items-center gap-3">
             <img 
               src="${escapeHtml(p.image_url)}" 
               alt="${escapeHtml(p.title)}" 
-              class="w-12 h-12 rounded-xl object-cover bg-slate-800 shrink-0 border border-slate-700"
+              class="w-12 h-12 rounded-xl object-cover bg-slate-100 shrink-0 border border-slate-200"
               onerror="this.src='https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=400&auto=format&fit=crop'"
             />
             <div class="min-w-0">
-              <div class="font-bold text-white text-sm truncate max-w-xs">${escapeHtml(p.title)}</div>
-              <div class="text-xs text-slate-400 truncate max-w-xs">${escapeHtml(p.tech_stack || '-')}</div>
+              <div class="font-bold text-slate-900 text-sm truncate max-w-xs">${escapeHtml(p.title)}</div>
+              <div class="text-xs text-slate-500 font-medium truncate max-w-xs">${escapeHtml(p.tech_stack || '-')}</div>
             </div>
           </div>
         </td>
 
         <!-- Category -->
         <td class="px-6 py-4">
-          <span class="inline-block px-3 py-1 text-xs font-semibold rounded-full bg-indigo-500/10 text-indigo-300 border border-indigo-500/20">
+          <span class="inline-block px-3 py-1 text-xs font-bold rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200">
             ${escapeHtml(p.category || 'General')}
           </span>
         </td>
@@ -341,20 +341,20 @@ function renderAdminProjectsTable(projects) {
         <!-- URL Link -->
         <td class="px-6 py-4 text-xs">
           ${p.project_url && p.project_url !== '#' 
-            ? `<a href="${escapeHtml(p.project_url)}" target="_blank" class="text-indigo-400 hover:underline flex items-center gap-1">
+            ? `<a href="${escapeHtml(p.project_url)}" target="_blank" class="text-indigo-600 hover:text-indigo-800 font-semibold flex items-center gap-1">
                  Buka URL <i data-lucide="external-link" class="w-3 h-3"></i>
                </a>`
-            : `<span class="text-slate-500">-</span>`
+            : `<span class="text-slate-400 font-medium">-</span>`
           }
         </td>
 
         <!-- Actions -->
         <td class="px-6 py-4 text-right">
           <div class="flex items-center justify-end gap-2">
-            <button onclick="editProject('${escapeHtml(p.id)}')" class="p-2 rounded-lg bg-slate-800 hover:bg-indigo-600 text-slate-300 hover:text-white transition-colors" title="Edit Proyek">
+            <button onclick="editProject('${escapeHtml(p.id)}')" class="p-2 rounded-lg bg-slate-100 hover:bg-indigo-50 text-slate-600 hover:text-indigo-600 border border-slate-200 transition-colors" title="Edit Proyek">
               <i data-lucide="pencil" class="w-4 h-4"></i>
             </button>
-            <button onclick="deleteProject('${escapeHtml(p.id)}')" class="p-2 rounded-lg bg-slate-800 hover:bg-rose-600 text-slate-300 hover:text-white transition-colors" title="Hapus Proyek">
+            <button onclick="deleteProject('${escapeHtml(p.id)}')" class="p-2 rounded-lg bg-slate-100 hover:bg-rose-50 text-slate-600 hover:text-rose-600 border border-slate-200 transition-colors" title="Hapus Proyek">
               <i data-lucide="trash-2" class="w-4 h-4"></i>
             </button>
           </div>
@@ -515,29 +515,29 @@ function renderAdminMessagesTable(messages) {
 
   tbody.innerHTML = messages.map(m => {
     return `
-      <tr class="border-b border-slate-800/80 hover:bg-slate-800/40 transition-colors">
-        <td class="px-6 py-4 text-xs text-slate-400 whitespace-nowrap">
+      <tr class="border-b border-slate-100 hover:bg-slate-50/80 transition-colors">
+        <td class="px-6 py-4 text-xs text-slate-500 font-medium whitespace-nowrap">
           ${escapeHtml(m.timestamp)}
         </td>
         <td class="px-6 py-4">
-          <div class="font-bold text-white text-sm">${escapeHtml(m.name)}</div>
-          <a href="mailto:${escapeHtml(m.email)}" class="text-xs text-indigo-400 hover:underline">${escapeHtml(m.email)}</a>
+          <div class="font-bold text-slate-900 text-sm">${escapeHtml(m.name)}</div>
+          <a href="mailto:${escapeHtml(m.email)}" class="text-xs text-indigo-600 font-medium hover:underline">${escapeHtml(m.email)}</a>
         </td>
-        <td class="px-6 py-4 text-xs font-semibold text-slate-200">
+        <td class="px-6 py-4 text-xs font-bold text-slate-800">
           ${escapeHtml(m.subject || 'Tanpa Subjek')}
         </td>
-        <td class="px-6 py-4 text-xs text-slate-300 max-w-sm">
+        <td class="px-6 py-4 text-xs text-slate-600 max-w-sm">
           <div class="line-clamp-2">${escapeHtml(m.message)}</div>
         </td>
         <td class="px-6 py-4 text-right whitespace-nowrap">
           <div class="flex items-center justify-end gap-2">
-            <a href="mailto:${escapeHtml(m.email)}?subject=Re: ${encodeURIComponent(m.subject || 'Portfolio Inquiry')}" class="p-2 rounded-lg bg-indigo-600/20 hover:bg-indigo-600 text-indigo-300 hover:text-white transition-colors" title="Balas via Email">
+            <a href="mailto:${escapeHtml(m.email)}?subject=Re: ${encodeURIComponent(m.subject || 'Portfolio Inquiry')}" class="p-2 rounded-lg bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 transition-colors" title="Balas via Email">
               <i data-lucide="mail-reply" class="w-4 h-4"></i>
             </a>
-            <button onclick="viewMessageDetail(${JSON.stringify(m).replace(/"/g, '&quot;')})" class="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors" title="Baca Pesan Lengkap">
+            <button onclick="viewMessageDetail(${JSON.stringify(m).replace(/"/g, '&quot;')})" class="p-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 transition-colors" title="Baca Pesan Lengkap">
               <i data-lucide="eye" class="w-4 h-4"></i>
             </button>
-            <button onclick="deleteMessageRow(${m.rowIndex})" class="p-2 rounded-lg bg-slate-800 hover:bg-rose-600 text-slate-300 hover:text-white transition-colors" title="Hapus Pesan">
+            <button onclick="deleteMessageRow(${m.rowIndex})" class="p-2 rounded-lg bg-slate-100 hover:bg-rose-50 text-slate-700 hover:text-rose-600 border border-slate-200 transition-colors" title="Hapus Pesan">
               <i data-lucide="trash-2" class="w-4 h-4"></i>
             </button>
           </div>
@@ -558,30 +558,30 @@ window.viewMessageDetail = function(msg) {
   if (!modal || !content) return;
 
   content.innerHTML = `
-    <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+    <div class="flex items-center justify-between pb-4 border-b border-slate-100">
       <div>
-        <h3 class="font-bold text-lg text-white">${escapeHtml(msg.subject || 'Detail Pesan Masuk')}</h3>
-        <p class="text-xs text-slate-400">${escapeHtml(msg.timestamp)}</p>
+        <h3 class="font-bold text-lg text-slate-900">${escapeHtml(msg.subject || 'Detail Pesan Masuk')}</h3>
+        <p class="text-xs text-slate-500 font-medium">${escapeHtml(msg.timestamp)}</p>
       </div>
-      <button onclick="document.getElementById('message-detail-modal').classList.add('hidden')" class="p-1 rounded-lg text-slate-400 hover:text-white">
+      <button onclick="document.getElementById('message-detail-modal').classList.add('hidden')" class="p-1 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100">
         <i data-lucide="x" class="w-5 h-5"></i>
       </button>
     </div>
 
     <div class="space-y-4 py-4 text-sm">
-      <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 flex items-center justify-between">
+      <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-between">
         <div>
-          <div class="font-bold text-white">${escapeHtml(msg.name)}</div>
-          <div class="text-xs text-slate-400">${escapeHtml(msg.email)}</div>
+          <div class="font-bold text-slate-900">${escapeHtml(msg.name)}</div>
+          <div class="text-xs text-slate-500 font-medium">${escapeHtml(msg.email)}</div>
         </div>
-        <a href="mailto:${escapeHtml(msg.email)}?subject=Re: ${encodeURIComponent(msg.subject || '')}" class="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold flex items-center gap-1.5">
+        <a href="mailto:${escapeHtml(msg.email)}?subject=Re: ${encodeURIComponent(msg.subject || '')}" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold flex items-center gap-1.5 shadow-sm">
           <i data-lucide="mail-reply" class="w-3.5 h-3.5"></i> Balas
         </a>
       </div>
 
       <div>
-        <h5 class="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Isi Pesan:</h5>
-        <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 text-slate-200 leading-relaxed whitespace-pre-wrap">${escapeHtml(msg.message)}</div>
+        <h5 class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Isi Pesan:</h5>
+        <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-slate-800 leading-relaxed whitespace-pre-wrap font-medium">${escapeHtml(msg.message)}</div>
       </div>
     </div>
   `;

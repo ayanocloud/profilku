@@ -15,30 +15,20 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
-      darkMode: 'class',
       theme: {
         extend: {
           fontFamily: {
             sans: ['"Plus Jakarta Sans"', 'sans-serif'],
           },
-          colors: {
-            dark: {
-              950: '#070a12',
-              900: '#0b0f19',
-              850: '#101626',
-              800: '#161f36',
-              700: '#232f4e'
-            }
-          },
           animation: {
-            'blob': 'blob 7s infinite',
+            'blob': 'blob 8s infinite',
             'pulse-subtle': 'pulseSubtle 3s infinite',
           },
           keyframes: {
             blob: {
               '0%': { transform: 'translate(0px, 0px) scale(1)' },
-              '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
-              '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+              '33%': { transform: 'translate(30px, -40px) scale(1.08)' },
+              '66%': { transform: 'translate(-20px, 20px) scale(0.92)' },
               '100%': { transform: 'translate(0px, 0px) scale(1)' },
             },
             pulseSubtle: {
@@ -55,52 +45,52 @@
   <script src="https://unpkg.com/lucide@latest"></script>
 
   <style>
-    /* Custom Smooth Scrollbar */
+    /* Smooth Scrollbar untuk Tema Cerah */
     ::-webkit-scrollbar {
       width: 8px;
     }
     ::-webkit-scrollbar-track {
-      background: #070a12;
+      background: #f1f5f9;
     }
     ::-webkit-scrollbar-thumb {
-      background: #1e293b;
+      background: #cbd5e1;
       border-radius: 4px;
     }
     ::-webkit-scrollbar-thumb:hover {
-      background: #334155;
+      background: #94a3b8;
     }
     .glass-card {
-      background: rgba(16, 22, 38, 0.65);
+      background: rgba(255, 255, 255, 0.85);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(226, 232, 240, 0.9);
     }
     .glass-nav {
-      background: rgba(7, 10, 18, 0.82);
+      background: rgba(255, 255, 255, 0.88);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+      border-bottom: 1px solid rgba(226, 232, 240, 0.9);
     }
   </style>
 </head>
-<body class="bg-dark-950 text-slate-100 font-sans antialiased selection:bg-indigo-500 selection:text-white min-h-screen relative overflow-x-hidden">
+<body class="bg-slate-50 text-slate-900 font-sans antialiased selection:bg-indigo-500 selection:text-white min-h-screen relative overflow-x-hidden">
 
-  <!-- Ambient Glow Background Blobs -->
+  <!-- Ambient Pastel Glow Background -->
   <div class="fixed inset-0 pointer-events-none -z-10 overflow-hidden">
-    <div class="absolute -top-40 -left-40 w-96 h-96 bg-indigo-600/15 rounded-full blur-3xl filter animate-blob"></div>
-    <div class="absolute top-1/3 -right-40 w-96 h-96 bg-purple-600/15 rounded-full blur-3xl filter animate-blob animation-delay-2000"></div>
-    <div class="absolute -bottom-40 left-1/3 w-96 h-96 bg-cyan-600/15 rounded-full blur-3xl filter animate-blob animation-delay-4000"></div>
-    <div class="absolute inset-0 bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:24px_24px] opacity-25"></div>
+    <div class="absolute -top-32 -left-32 w-[32rem] h-[32rem] bg-indigo-200/50 rounded-full blur-3xl filter animate-blob"></div>
+    <div class="absolute top-1/4 -right-32 w-[30rem] h-[30rem] bg-purple-200/40 rounded-full blur-3xl filter animate-blob animation-delay-2000"></div>
+    <div class="absolute -bottom-32 left-1/4 w-[32rem] h-[32rem] bg-sky-200/45 rounded-full blur-3xl filter animate-blob animation-delay-4000"></div>
+    <div class="absolute inset-0 bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] [background-size:24px_24px] opacity-60"></div>
   </div>
 
   <!-- Banner Pemberitahuan Mode Demo / Setting API -->
-  <div id="demo-mode-notice" class="hidden bg-gradient-to-r from-indigo-900/90 via-purple-900/90 to-slate-900/90 border-b border-indigo-500/30 py-2.5 px-4 text-xs sm:text-sm text-center text-slate-200">
+  <div id="demo-mode-notice" class="hidden bg-gradient-to-r from-indigo-50 via-purple-50 to-sky-50 border-b border-indigo-200/70 py-2.5 px-4 text-xs sm:text-sm text-center text-slate-700">
     <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-center gap-2">
-      <span class="inline-flex items-center gap-1.5 font-medium text-indigo-300">
+      <span class="inline-flex items-center gap-1.5 font-semibold text-indigo-700">
         <i data-lucide="info" class="w-4 h-4"></i> Mode Pratinjau Demo Aktif:
       </span>
       <span>Belum menghubungkan Google Apps Script? Anda dapat menghubungkan URL Web App sekarang.</span>
-      <button id="btn-open-api-settings" class="ml-2 underline font-semibold text-white hover:text-indigo-300 transition-colors">
+      <button id="btn-open-api-settings" class="ml-2 underline font-bold text-indigo-600 hover:text-indigo-800 transition-colors">
         Atur URL API
       </button>
     </div>
@@ -109,68 +99,68 @@
   <!-- ====================================================================
        STICKY NAVBAR
        ==================================================================== -->
-  <header class="sticky top-0 z-40 glass-nav transition-all duration-300">
+  <header class="sticky top-0 z-40 glass-nav transition-all duration-300 shadow-xs">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
       <!-- Logo / Brand -->
       <a href="#home" class="flex items-center gap-3 group">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 via-purple-600 to-cyan-400 p-0.5 shadow-lg shadow-indigo-500/30 transition-transform group-hover:scale-105">
-          <div class="w-full h-full bg-dark-950 rounded-[10px] flex items-center justify-center font-extrabold text-white text-lg">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 via-purple-600 to-sky-500 p-0.5 shadow-md shadow-indigo-500/20 transition-transform group-hover:scale-105">
+          <div class="w-full h-full bg-white rounded-[10px] flex items-center justify-center font-extrabold text-indigo-600 text-lg">
             AR
           </div>
         </div>
         <div class="flex flex-col">
-          <span id="nav-brand-name" class="font-bold text-base sm:text-lg tracking-tight text-white group-hover:text-indigo-400 transition-colors">
+          <span id="nav-brand-name" class="font-extrabold text-base sm:text-lg tracking-tight text-slate-900 group-hover:text-indigo-600 transition-colors">
             Ahmad Rizky Pratama
           </span>
-          <span class="text-[11px] font-medium text-slate-400 tracking-wider uppercase">Portfolio & Insights</span>
+          <span class="text-[11px] font-semibold text-slate-600 tracking-wider uppercase">Portfolio & Insights</span>
         </div>
       </a>
 
       <!-- Desktop Navigation -->
-      <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-300">
-        <a href="#home" class="hover:text-indigo-400 transition-colors">Beranda</a>
-        <a href="#about" class="hover:text-indigo-400 transition-colors">Tentang</a>
-        <a href="#projects" class="hover:text-indigo-400 transition-colors">Portofolio</a>
-        <a href="#contact" class="hover:text-indigo-400 transition-colors">Kontak</a>
+      <nav class="hidden md:flex items-center gap-8 text-sm font-semibold text-slate-700">
+        <a href="#home" class="hover:text-indigo-600 transition-colors">Beranda</a>
+        <a href="#about" class="hover:text-indigo-600 transition-colors">Tentang</a>
+        <a href="#projects" class="hover:text-indigo-600 transition-colors">Portofolio</a>
+        <a href="#contact" class="hover:text-indigo-600 transition-colors">Kontak</a>
       </nav>
 
       <!-- Action Buttons -->
       <div class="hidden md:flex items-center gap-3">
         <!-- Settings Quick Trigger -->
-        <button id="btn-trigger-settings" onclick="document.getElementById('btn-open-api-settings')?.click()" title="Konfigurasi URL Google Apps Script" class="p-2.5 rounded-xl glass-card text-slate-400 hover:text-white hover:border-slate-600 transition-all">
+        <button id="btn-trigger-settings" onclick="document.getElementById('btn-open-api-settings')?.click()" title="Konfigurasi URL Google Apps Script" class="p-2.5 rounded-xl bg-white border border-slate-200/90 text-slate-600 hover:text-indigo-600 hover:border-indigo-300 transition-all shadow-xs">
           <i data-lucide="settings" class="w-4 h-4"></i>
         </button>
 
         <!-- Admin Dashboard Link -->
-        <a id="nav-admin-link" href="admin.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-200 glass-card hover:bg-slate-800/80 hover:text-white transition-all border border-slate-700/60 shadow-sm">
-          <i data-lucide="shield-check" class="w-4 h-4 text-indigo-400"></i>
+        <a id="nav-admin-link" href="admin.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-800 bg-white hover:bg-slate-50 transition-all border border-slate-200 shadow-xs">
+          <i data-lucide="shield-check" class="w-4 h-4 text-indigo-600"></i>
           <span>Admin Panel</span>
         </a>
 
-        <!-- Hire Me CTA -->
-        <a href="#contact" class="inline-flex items-center gap-2 px-5 py-2 rounded-xl text-xs sm:text-sm font-semibold text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 transition-all shadow-lg shadow-indigo-600/25 hover:shadow-indigo-600/40">
+        <!-- Contact CTA -->
+        <a href="#contact" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 transition-all shadow-md shadow-indigo-600/20 hover:shadow-indigo-600/30">
           <span>Kontak Saya</span>
           <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
         </a>
       </div>
 
       <!-- Mobile Menu Button -->
-      <button id="mobile-menu-btn" class="md:hidden p-2 rounded-xl text-slate-400 hover:text-white glass-card">
+      <button id="mobile-menu-btn" class="md:hidden p-2 rounded-xl text-slate-600 hover:text-slate-900 bg-white border border-slate-200">
         <i data-lucide="menu" class="w-6 h-6"></i>
       </button>
     </div>
 
     <!-- Mobile Dropdown Menu -->
-    <div id="mobile-menu" class="hidden md:hidden glass-nav border-t border-slate-800 px-6 py-5 space-y-4">
-      <a href="#home" class="block text-slate-300 hover:text-indigo-400 py-1">Beranda</a>
-      <a href="#about" class="block text-slate-300 hover:text-indigo-400 py-1">Tentang</a>
-      <a href="#projects" class="block text-slate-300 hover:text-indigo-400 py-1">Portofolio</a>
-      <a href="#contact" class="block text-slate-300 hover:text-indigo-400 py-1">Kontak</a>
-      <div class="pt-4 border-t border-slate-800 flex flex-col gap-2.5">
-        <a href="admin.html" class="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl text-sm font-medium text-slate-200 glass-card">
-          <i data-lucide="shield-check" class="w-4 h-4 text-indigo-400"></i> Admin Dashboard
+    <div id="mobile-menu" class="hidden md:hidden bg-white/95 backdrop-blur-md border-t border-slate-200 px-6 py-5 space-y-4 shadow-xl">
+      <a href="#home" class="block text-slate-700 hover:text-indigo-600 py-1 font-semibold">Beranda</a>
+      <a href="#about" class="block text-slate-700 hover:text-indigo-600 py-1 font-semibold">Tentang</a>
+      <a href="#projects" class="block text-slate-700 hover:text-indigo-600 py-1 font-semibold">Portofolio</a>
+      <a href="#contact" class="block text-slate-700 hover:text-indigo-600 py-1 font-semibold">Kontak</a>
+      <div class="pt-4 border-t border-slate-200 flex flex-col gap-2.5">
+        <a href="admin.html" class="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl text-sm font-semibold text-slate-800 bg-slate-50 border border-slate-200">
+          <i data-lucide="shield-check" class="w-4 h-4 text-indigo-600"></i> Admin Dashboard
         </a>
-        <a href="#contact" class="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl text-sm font-semibold text-white bg-indigo-600">
+        <a href="#contact" class="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl text-sm font-semibold text-white bg-indigo-600 shadow-md">
           Hubungi Saya
         </a>
       </div>
@@ -181,58 +171,58 @@
     <!-- ====================================================================
          HERO SECTION
          ==================================================================== -->
-    <section id="home" class="relative pt-16 pb-24 md:pt-28 md:pb-36">
+    <section id="home" class="relative pt-16 pb-20 md:pt-24 md:pb-32">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
           
           <!-- Left Column: Copywriting & CTA -->
           <div class="lg:col-span-7 space-y-7 text-center lg:text-left">
             <!-- Availability Badge -->
-            <div class="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 backdrop-blur-md">
-              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+            <div class="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200/80 shadow-xs">
+              <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
               <span>Tersedia untuk Proyek Baru & Kolaborasi</span>
             </div>
 
             <!-- Headline -->
             <div class="space-y-3">
-              <p class="text-sm sm:text-base font-semibold tracking-wider text-indigo-400 uppercase">
+              <p class="text-sm sm:text-base font-bold tracking-wider text-indigo-600 uppercase">
                 Selamat Datang di Portofolio Saya
               </p>
-              <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white tracking-tight leading-[1.15]">
-                Halo, Saya <span id="hero-name" class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-cyan-400">Ahmad Rizky Pratama</span>
+              <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold text-slate-900 tracking-tight leading-[1.15]">
+                Halo, Saya <span id="hero-name" class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-600">Ahmad Rizky Pratama</span>
               </h1>
-              <h2 id="hero-role" class="text-xl sm:text-2xl font-bold text-slate-300">
+              <h2 id="hero-role" class="text-xl sm:text-2xl font-bold text-slate-700">
                 Full Stack Developer & Cloud Architect
               </h2>
             </div>
 
             <!-- Bio -->
-            <p id="hero-bio" class="text-base sm:text-lg text-slate-400 leading-relaxed max-w-2xl mx-auto lg:mx-0">
+            <p id="hero-bio" class="text-base sm:text-lg text-slate-600 leading-relaxed max-w-2xl mx-auto lg:mx-0">
               Software engineer berdedikasi dengan fokus pada pengembangan ekosistem web modern, cloud architecture, dan UI/UX interaktif. Senang memecahkan masalah kompleks dan merancang solusi digital yang berdampak nyata.
             </p>
 
             <!-- Buttons -->
             <div class="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2">
-              <a href="#projects" class="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-xl font-semibold text-white bg-indigo-600 hover:bg-indigo-500 transition-all shadow-xl shadow-indigo-600/30 hover:scale-[1.02]">
+              <a href="#projects" class="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-xl font-bold text-white bg-indigo-600 hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-600/25 hover:scale-[1.02]">
                 <i data-lucide="briefcase" class="w-5 h-5"></i>
                 <span>Lihat Karya Portofolio</span>
               </a>
-              <a href="#contact" class="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-xl font-semibold text-slate-200 glass-card hover:bg-slate-800/80 hover:text-white transition-all border border-slate-700 hover:scale-[1.02]">
-                <i data-lucide="mail" class="w-5 h-5 text-indigo-400"></i>
+              <a href="#contact" class="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-xl font-semibold text-slate-700 bg-white hover:bg-slate-50 transition-all border border-slate-200 shadow-sm hover:scale-[1.02]">
+                <i data-lucide="mail" class="w-5 h-5 text-indigo-600"></i>
                 <span>Hubungi Saya</span>
               </a>
             </div>
 
             <!-- Social Media Icons -->
             <div class="pt-4 flex items-center justify-center lg:justify-start gap-3">
-              <span class="text-xs font-medium text-slate-400 mr-2">Temukan Saya di:</span>
-              <a id="link-github-hero" href="https://github.com" target="_blank" rel="noopener noreferrer" class="p-2.5 rounded-xl glass-card text-slate-400 hover:text-white hover:border-slate-500 transition-all">
+              <span class="text-xs font-semibold text-slate-600 mr-2">Temukan Saya di:</span>
+              <a id="link-github-hero" href="https://github.com" target="_blank" rel="noopener noreferrer" class="p-2.5 rounded-xl bg-white border border-slate-200 text-slate-600 hover:text-slate-900 hover:border-slate-300 shadow-xs transition-all">
                 <i data-lucide="github" class="w-5 h-5"></i>
               </a>
-              <a id="link-linkedin-hero" href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="p-2.5 rounded-xl glass-card text-slate-400 hover:text-cyan-400 hover:border-cyan-500/50 transition-all">
+              <a id="link-linkedin-hero" href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="p-2.5 rounded-xl bg-white border border-slate-200 text-slate-600 hover:text-indigo-600 hover:border-indigo-300 shadow-xs transition-all">
                 <i data-lucide="linkedin" class="w-5 h-5"></i>
               </a>
-              <a id="link-instagram-hero" href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="p-2.5 rounded-xl glass-card text-slate-400 hover:text-pink-400 hover:border-pink-500/50 transition-all">
+              <a id="link-instagram-hero" href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="p-2.5 rounded-xl bg-white border border-slate-200 text-slate-600 hover:text-pink-600 hover:border-pink-300 shadow-xs transition-all">
                 <i data-lucide="instagram" class="w-5 h-5"></i>
               </a>
             </div>
@@ -242,63 +232,63 @@
           <div class="lg:col-span-5 flex justify-center">
             <div class="relative w-full max-w-md">
               <!-- Glow backdrop -->
-              <div class="absolute -inset-1.5 bg-gradient-to-r from-indigo-500 via-purple-500 to-cyan-500 rounded-3xl blur-xl opacity-30 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div>
+              <div class="absolute -inset-1.5 bg-gradient-to-r from-indigo-200 via-purple-200 to-sky-200 rounded-3xl blur-xl opacity-70"></div>
               
               <!-- Card Container -->
-              <div class="relative glass-card rounded-3xl p-8 border border-white/10 shadow-2xl">
+              <div class="relative bg-white rounded-3xl p-8 border border-slate-200/80 shadow-xl shadow-slate-200/50">
                 <!-- Avatar & Status -->
-                <div class="flex items-center gap-5 pb-6 border-b border-slate-800">
+                <div class="flex items-center gap-5 pb-6 border-b border-slate-100">
                   <div class="relative">
                     <img 
                       src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=400&auto=format&fit=crop" 
                       alt="Profile Avatar" 
-                      class="w-20 h-20 rounded-2xl object-cover ring-2 ring-indigo-500/50 shadow-md"
+                      class="w-20 h-20 rounded-2xl object-cover ring-2 ring-indigo-500/30 shadow-md"
                     />
-                    <span class="absolute -bottom-1 -right-1 w-5 h-5 bg-emerald-500 border-2 border-dark-950 rounded-full"></span>
+                    <span class="absolute -bottom-1 -right-1 w-5 h-5 bg-emerald-500 border-2 border-white rounded-full"></span>
                   </div>
                   <div>
-                    <h3 class="font-bold text-lg text-white">Ahmad Rizky Pratama</h3>
-                    <p class="text-xs text-indigo-400 font-medium">Software Engineer</p>
-                    <p class="text-xs text-slate-400 flex items-center gap-1 mt-1">
+                    <h3 class="font-bold text-lg text-slate-900">Ahmad Rizky Pratama</h3>
+                    <p class="text-xs text-indigo-600 font-semibold">Software Engineer</p>
+                    <p class="text-xs text-slate-600 flex items-center gap-1 mt-1 font-medium">
                       <i data-lucide="map-pin" class="w-3.5 h-3.5 text-slate-500"></i> Jakarta, Indonesia
                     </p>
                   </div>
                 </div>
 
                 <!-- Code Terminal Simulation -->
-                <div class="mt-6 bg-dark-950/90 rounded-2xl p-4 border border-slate-800 font-mono text-xs text-slate-300 space-y-2">
-                  <div class="flex items-center gap-1.5 pb-2 border-b border-slate-800/80">
+                <div class="mt-6 bg-slate-900 rounded-2xl p-4 border border-slate-800 font-mono text-xs text-slate-200 space-y-2 shadow-inner">
+                  <div class="flex items-center gap-1.5 pb-2 border-b border-slate-800">
                     <span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
                     <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
                     <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
-                    <span class="ml-2 text-[10px] text-slate-500">developer.config.ts</span>
+                    <span class="ml-2 text-[10px] text-slate-400">developer.config.ts</span>
                   </div>
-                  <p class="text-purple-400">const <span class="text-indigo-300">stack</span> = {</p>
-                  <p class="pl-4 text-slate-400">frontend: [<span class="text-emerald-400">'Next.js'</span>, <span class="text-emerald-400">'Tailwind'</span>],</p>
-                  <p class="pl-4 text-slate-400">backend: [<span class="text-emerald-400">'Node.js'</span>, <span class="text-emerald-400">'FastAPI'</span>],</p>
-                  <p class="pl-4 text-slate-400">cloud: [<span class="text-emerald-400">'GCP'</span>, <span class="text-emerald-400">'Docker'</span>],</p>
-                  <p class="pl-4 text-slate-400">status: <span class="text-amber-300">'Ready for innovation'</span></p>
-                  <p class="text-purple-400">};</p>
+                  <p class="text-purple-300">const <span class="text-indigo-300">stack</span> = {</p>
+                  <p class="pl-4 text-slate-300">frontend: [<span class="text-emerald-400">'Next.js'</span>, <span class="text-emerald-400">'Tailwind'</span>],</p>
+                  <p class="pl-4 text-slate-300">backend: [<span class="text-emerald-400">'Node.js'</span>, <span class="text-emerald-400">'FastAPI'</span>],</p>
+                  <p class="pl-4 text-slate-300">cloud: [<span class="text-emerald-400">'GCP'</span>, <span class="text-emerald-400">'Docker'</span>],</p>
+                  <p class="pl-4 text-slate-300">status: <span class="text-amber-300">'Ready for innovation'</span></p>
+                  <p class="text-purple-300">};</p>
                 </div>
 
                 <!-- Floating Badges -->
                 <div class="grid grid-cols-2 gap-3 mt-6">
-                  <div class="p-3 rounded-xl bg-slate-900/60 border border-slate-800 flex items-center gap-3">
-                    <div class="w-9 h-9 rounded-lg bg-indigo-500/10 flex items-center justify-center text-indigo-400">
+                  <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-lg bg-indigo-100 flex items-center justify-center text-indigo-600">
                       <i data-lucide="layers" class="w-4 h-4"></i>
                     </div>
                     <div>
-                      <div class="text-xs text-slate-400">Spesialisasi</div>
-                      <div class="text-xs font-bold text-white">Full Stack</div>
+                      <div class="text-[11px] text-slate-500 font-medium">Spesialisasi</div>
+                      <div class="text-xs font-bold text-slate-900">Full Stack</div>
                     </div>
                   </div>
-                  <div class="p-3 rounded-xl bg-slate-900/60 border border-slate-800 flex items-center gap-3">
-                    <div class="w-9 h-9 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-400">
+                  <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-lg bg-emerald-100 flex items-center justify-center text-emerald-600">
                       <i data-lucide="database" class="w-4 h-4"></i>
                     </div>
                     <div>
-                      <div class="text-xs text-slate-400">Backend API</div>
-                      <div class="text-xs font-bold text-white">Google Sheets</div>
+                      <div class="text-[11px] text-slate-500 font-medium">Backend API</div>
+                      <div class="text-xs font-bold text-slate-900">Google Sheets</div>
                     </div>
                   </div>
                 </div>
@@ -314,38 +304,38 @@
     <!-- ====================================================================
          ABOUT SECTION & TECH STACK
          ==================================================================== -->
-    <section id="about" class="py-24 border-t border-slate-800/80 relative">
+    <section id="about" class="py-20 border-t border-slate-200 relative bg-white/60">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <div class="text-center max-w-3xl mx-auto mb-16">
-          <span class="px-3.5 py-1.5 rounded-full text-xs font-semibold bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+          <span class="px-3.5 py-1.5 rounded-full text-xs font-bold bg-indigo-50 text-indigo-700 border border-indigo-200">
             TENTANG SAYA
           </span>
-          <h2 class="text-3xl sm:text-4xl font-extrabold text-white mt-4 tracking-tight">
+          <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-4 tracking-tight">
             Membangun Solusi Digital dengan Kualitas Terbaik
           </h2>
-          <p id="about-bio" class="mt-4 text-slate-400 text-base leading-relaxed">
+          <p id="about-bio" class="mt-4 text-slate-600 text-base leading-relaxed">
             Software engineer dengan ketertarikan tinggi pada performa, skalabilitas, dan arsitektur kode bersih. Saya memadukan desain UI yang intuitif dengan sistem backend yang tangguh.
           </p>
         </div>
 
         <!-- Metrics Grid -->
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 mb-16">
-          <div class="glass-card rounded-2xl p-6 text-center border border-white/5">
-            <div class="text-3xl sm:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">4+</div>
-            <div class="text-xs sm:text-sm font-medium text-slate-400 mt-2">Tahun Pengalaman</div>
+          <div class="bg-white rounded-2xl p-6 text-center border border-slate-200/80 shadow-xs hover:shadow-md transition-shadow">
+            <div class="text-3xl sm:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">4+</div>
+            <div class="text-xs sm:text-sm font-semibold text-slate-600 mt-2">Tahun Pengalaman</div>
           </div>
-          <div class="glass-card rounded-2xl p-6 text-center border border-white/5">
-            <div class="text-3xl sm:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">25+</div>
-            <div class="text-xs sm:text-sm font-medium text-slate-400 mt-2">Proyek Selesai</div>
+          <div class="bg-white rounded-2xl p-6 text-center border border-slate-200/80 shadow-xs hover:shadow-md transition-shadow">
+            <div class="text-3xl sm:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600">25+</div>
+            <div class="text-xs sm:text-sm font-semibold text-slate-600 mt-2">Proyek Selesai</div>
           </div>
-          <div class="glass-card rounded-2xl p-6 text-center border border-white/5">
-            <div class="text-3xl sm:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-emerald-400">99%</div>
-            <div class="text-xs sm:text-sm font-medium text-slate-400 mt-2">Kepuasan Klien</div>
+          <div class="bg-white rounded-2xl p-6 text-center border border-slate-200/80 shadow-xs hover:shadow-md transition-shadow">
+            <div class="text-3xl sm:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-600 to-emerald-600">99%</div>
+            <div class="text-xs sm:text-sm font-semibold text-slate-600 mt-2">Kepuasan Klien</div>
           </div>
-          <div class="glass-card rounded-2xl p-6 text-center border border-white/5">
-            <div class="text-3xl sm:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-400">500+</div>
-            <div class="text-xs sm:text-sm font-medium text-slate-400 mt-2">Git Commits</div>
+          <div class="bg-white rounded-2xl p-6 text-center border border-slate-200/80 shadow-xs hover:shadow-md transition-shadow">
+            <div class="text-3xl sm:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-amber-600 to-orange-600">500+</div>
+            <div class="text-xs sm:text-sm font-semibold text-slate-600 mt-2">Git Commits</div>
           </div>
         </div>
 
@@ -353,56 +343,56 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
           
           <!-- Category 1: Frontend -->
-          <div class="glass-card rounded-2xl p-7 border border-white/5 hover:border-indigo-500/40 transition-colors">
-            <div class="w-12 h-12 rounded-xl bg-indigo-500/10 flex items-center justify-center text-indigo-400 mb-5">
+          <div class="bg-white rounded-2xl p-7 border border-slate-200/80 shadow-xs hover:border-indigo-300 hover:shadow-lg transition-all">
+            <div class="w-12 h-12 rounded-xl bg-indigo-50 flex items-center justify-center text-indigo-600 mb-5">
               <i data-lucide="layout" class="w-6 h-6"></i>
             </div>
-            <h3 class="text-lg font-bold text-white mb-2">Frontend Engineering</h3>
-            <p class="text-slate-400 text-sm mb-5 leading-relaxed">
+            <h3 class="text-lg font-bold text-slate-900 mb-2">Frontend Engineering</h3>
+            <p class="text-slate-600 text-sm mb-5 leading-relaxed">
               Membangun antarmuka responsif yang cepat, aksesibel, dan memikat pengguna.
             </p>
             <div class="flex flex-wrap gap-2">
-              <span class="px-2.5 py-1 text-xs rounded-lg bg-slate-800 text-slate-300 font-medium">React / Next.js</span>
-              <span class="px-2.5 py-1 text-xs rounded-lg bg-slate-800 text-slate-300 font-medium">Tailwind CSS</span>
-              <span class="px-2.5 py-1 text-xs rounded-lg bg-slate-800 text-slate-300 font-medium">TypeScript</span>
-              <span class="px-2.5 py-1 text-xs rounded-lg bg-slate-800 text-slate-300 font-medium">HTML5 & Vanilla JS</span>
-              <span class="px-2.5 py-1 text-xs rounded-lg bg-slate-800 text-slate-300 font-medium">Redux / Zustand</span>
+              <span class="px-2.5 py-1 text-xs rounded-lg bg-slate-100 text-slate-700 font-semibold border border-slate-200/60">React / Next.js</span>
+              <span class="px-2.5 py-1 text-xs rounded-lg bg-slate-100 text-slate-700 font-semibold border border-slate-200/60">Tailwind CSS</span>
+              <span class="px-2.5 py-1 text-xs rounded-lg bg-slate-100 text-slate-700 font-semibold border border-slate-200/60">TypeScript</span>
+              <span class="px-2.5 py-1 text-xs rounded-lg bg-slate-100 text-slate-700 font-semibold border border-slate-200/60">HTML5 & Vanilla JS</span>
+              <span class="px-2.5 py-1 text-xs rounded-lg bg-slate-100 text-slate-700 font-semibold border border-slate-200/60">Redux / Zustand</span>
             </div>
           </div>
 
           <!-- Category 2: Backend & Database -->
-          <div class="glass-card rounded-2xl p-7 border border-white/5 hover:border-purple-500/40 transition-colors">
-            <div class="w-12 h-12 rounded-xl bg-purple-500/10 flex items-center justify-center text-purple-400 mb-5">
+          <div class="bg-white rounded-2xl p-7 border border-slate-200/80 shadow-xs hover:border-purple-300 hover:shadow-lg transition-all">
+            <div class="w-12 h-12 rounded-xl bg-purple-50 flex items-center justify-center text-purple-600 mb-5">
               <i data-lucide="server" class="w-6 h-6"></i>
             </div>
-            <h3 class="text-lg font-bold text-white mb-2">Backend & Architecture</h3>
-            <p class="text-slate-400 text-sm mb-5 leading-relaxed">
+            <h3 class="text-lg font-bold text-slate-900 mb-2">Backend & Architecture</h3>
+            <p class="text-slate-600 text-sm mb-5 leading-relaxed">
               Arsitektur REST API, serverless functions, database relasional dan NoSQL.
             </p>
             <div class="flex flex-wrap gap-2">
-              <span class="px-2.5 py-1 text-xs rounded-lg bg-slate-800 text-slate-300 font-medium">Node.js / Express</span>
-              <span class="px-2.5 py-1 text-xs rounded-lg bg-slate-800 text-slate-300 font-medium">Python FastAPI</span>
-              <span class="px-2.5 py-1 text-xs rounded-lg bg-slate-800 text-slate-300 font-medium">Google Apps Script</span>
-              <span class="px-2.5 py-1 text-xs rounded-lg bg-slate-800 text-slate-300 font-medium">PostgreSQL & Redis</span>
-              <span class="px-2.5 py-1 text-xs rounded-lg bg-slate-800 text-slate-300 font-medium">REST & GraphQL</span>
+              <span class="px-2.5 py-1 text-xs rounded-lg bg-slate-100 text-slate-700 font-semibold border border-slate-200/60">Node.js / Express</span>
+              <span class="px-2.5 py-1 text-xs rounded-lg bg-slate-100 text-slate-700 font-semibold border border-slate-200/60">Python FastAPI</span>
+              <span class="px-2.5 py-1 text-xs rounded-lg bg-slate-100 text-slate-700 font-semibold border border-slate-200/60">Google Apps Script</span>
+              <span class="px-2.5 py-1 text-xs rounded-lg bg-slate-100 text-slate-700 font-semibold border border-slate-200/60">PostgreSQL & Redis</span>
+              <span class="px-2.5 py-1 text-xs rounded-lg bg-slate-100 text-slate-700 font-semibold border border-slate-200/60">REST & GraphQL</span>
             </div>
           </div>
 
           <!-- Category 3: Cloud & Tools -->
-          <div class="glass-card rounded-2xl p-7 border border-white/5 hover:border-cyan-500/40 transition-colors">
-            <div class="w-12 h-12 rounded-xl bg-cyan-500/10 flex items-center justify-center text-cyan-400 mb-5">
+          <div class="bg-white rounded-2xl p-7 border border-slate-200/80 shadow-xs hover:border-sky-300 hover:shadow-lg transition-all">
+            <div class="w-12 h-12 rounded-xl bg-sky-50 flex items-center justify-center text-sky-600 mb-5">
               <i data-lucide="cloud-lightning" class="w-6 h-6"></i>
             </div>
-            <h3 class="text-lg font-bold text-white mb-2">Cloud & DevOps</h3>
-            <p class="text-slate-400 text-sm mb-5 leading-relaxed">
+            <h3 class="text-lg font-bold text-slate-900 mb-2">Cloud & DevOps</h3>
+            <p class="text-slate-600 text-sm mb-5 leading-relaxed">
               Deployment pipeline, automated testing, containerization, dan cloud hosting.
             </p>
             <div class="flex flex-wrap gap-2">
-              <span class="px-2.5 py-1 text-xs rounded-lg bg-slate-800 text-slate-300 font-medium">Docker</span>
-              <span class="px-2.5 py-1 text-xs rounded-lg bg-slate-800 text-slate-300 font-medium">Google Cloud (GCP)</span>
-              <span class="px-2.5 py-1 text-xs rounded-lg bg-slate-800 text-slate-300 font-medium">Vercel / Netlify</span>
-              <span class="px-2.5 py-1 text-xs rounded-lg bg-slate-800 text-slate-300 font-medium">Git & GitHub Actions</span>
-              <span class="px-2.5 py-1 text-xs rounded-lg bg-slate-800 text-slate-300 font-medium">Figma</span>
+              <span class="px-2.5 py-1 text-xs rounded-lg bg-slate-100 text-slate-700 font-semibold border border-slate-200/60">Docker</span>
+              <span class="px-2.5 py-1 text-xs rounded-lg bg-slate-100 text-slate-700 font-semibold border border-slate-200/60">Google Cloud (GCP)</span>
+              <span class="px-2.5 py-1 text-xs rounded-lg bg-slate-100 text-slate-700 font-semibold border border-slate-200/60">Vercel / Netlify</span>
+              <span class="px-2.5 py-1 text-xs rounded-lg bg-slate-100 text-slate-700 font-semibold border border-slate-200/60">Git & GitHub Actions</span>
+              <span class="px-2.5 py-1 text-xs rounded-lg bg-slate-100 text-slate-700 font-semibold border border-slate-200/60">Figma</span>
             </div>
           </div>
 
@@ -414,19 +404,19 @@
     <!-- ====================================================================
          PROJECTS SECTION (DYNAMIC FETCH & FILTER)
          ==================================================================== -->
-    <section id="projects" class="py-24 border-t border-slate-800/80 relative">
+    <section id="projects" class="py-20 border-t border-slate-200 relative">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <!-- Header -->
         <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
           <div>
-            <span class="px-3.5 py-1.5 rounded-full text-xs font-semibold bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+            <span class="px-3.5 py-1.5 rounded-full text-xs font-bold bg-indigo-50 text-indigo-700 border border-indigo-200">
               PORTOFOLIO PILIHAN
             </span>
-            <h2 class="text-3xl sm:text-4xl font-extrabold text-white mt-4 tracking-tight">
+            <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-4 tracking-tight">
               Karya & Proyek Terkini
             </h2>
-            <p class="mt-2 text-slate-400 text-sm sm:text-base">
+            <p class="mt-2 text-slate-600 text-sm sm:text-base">
               Data portofolio ini diambil langsung secara dinamis dari database Google Sheets.
             </p>
           </div>
@@ -448,7 +438,7 @@
     <!-- ====================================================================
          CONTACT SECTION
          ==================================================================== -->
-    <section id="contact" class="py-24 border-t border-slate-800/80 relative">
+    <section id="contact" class="py-20 border-t border-slate-200 relative bg-white/60">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
@@ -456,13 +446,13 @@
           <!-- Contact Info Column -->
           <div class="lg:col-span-5 space-y-8">
             <div>
-              <span class="px-3.5 py-1.5 rounded-full text-xs font-semibold bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+              <span class="px-3.5 py-1.5 rounded-full text-xs font-bold bg-indigo-50 text-indigo-700 border border-indigo-200">
                 HUBUNGI SAYA
               </span>
-              <h2 class="text-3xl sm:text-4xl font-extrabold text-white mt-4 tracking-tight">
+              <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-4 tracking-tight">
                 Mari Diskusikan Proyek Impian Anda
               </h2>
-              <p class="mt-4 text-slate-400 text-sm sm:text-base leading-relaxed">
+              <p class="mt-4 text-slate-600 text-sm sm:text-base leading-relaxed">
                 Punya pertanyaan, ide kolaborasi, atau ingin konsultasi seputar pengembangan web dan arsitektur cloud? Kirimkan pesan sekarang!
               </p>
             </div>
@@ -470,35 +460,35 @@
             <!-- Contact Details Cards -->
             <div class="space-y-4">
               <!-- Email Card -->
-              <a id="contact-email-link" href="mailto:ahmad.rizky@example.com" class="glass-card rounded-2xl p-4 flex items-center gap-4 hover:border-indigo-500/40 transition-colors group">
-                <div class="w-12 h-12 rounded-xl bg-indigo-500/10 flex items-center justify-center text-indigo-400 group-hover:scale-110 transition-transform">
+              <a id="contact-email-link" href="mailto:ahmad.rizky@example.com" class="bg-white rounded-2xl p-4 flex items-center gap-4 border border-slate-200/80 shadow-xs hover:border-indigo-300 hover:shadow-md transition-all group">
+                <div class="w-12 h-12 rounded-xl bg-indigo-50 flex items-center justify-center text-indigo-600 group-hover:scale-105 transition-transform">
                   <i data-lucide="mail" class="w-5 h-5"></i>
                 </div>
                 <div>
-                  <div class="text-xs text-slate-400">Kirim Email</div>
-                  <div id="contact-email-text" class="text-sm font-semibold text-white">ahmad.rizky@example.com</div>
+                  <div class="text-xs text-slate-600 font-medium">Kirim Email</div>
+                  <div id="contact-email-text" class="text-sm font-bold text-slate-900">ahmad.rizky@example.com</div>
                 </div>
               </a>
 
               <!-- Phone Card -->
-              <a id="contact-phone-link" href="tel:+6281234567890" class="glass-card rounded-2xl p-4 flex items-center gap-4 hover:border-emerald-500/40 transition-colors group">
-                <div class="w-12 h-12 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-400 group-hover:scale-110 transition-transform">
+              <a id="contact-phone-link" href="tel:+6281234567890" class="bg-white rounded-2xl p-4 flex items-center gap-4 border border-slate-200/80 shadow-xs hover:border-emerald-300 hover:shadow-md transition-all group">
+                <div class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600 group-hover:scale-105 transition-transform">
                   <i data-lucide="phone" class="w-5 h-5"></i>
                 </div>
                 <div>
-                  <div class="text-xs text-slate-400">Telepon / WhatsApp</div>
-                  <div id="contact-phone-text" class="text-sm font-semibold text-white">+62 812-3456-7890</div>
+                  <div class="text-xs text-slate-600 font-medium">Telepon / WhatsApp</div>
+                  <div id="contact-phone-text" class="text-sm font-bold text-slate-900">+62 812-3456-7890</div>
                 </div>
               </a>
 
               <!-- Location Card -->
-              <div class="glass-card rounded-2xl p-4 flex items-center gap-4 border border-white/5">
-                <div class="w-12 h-12 rounded-xl bg-cyan-500/10 flex items-center justify-center text-cyan-400">
+              <div class="bg-white rounded-2xl p-4 flex items-center gap-4 border border-slate-200/80 shadow-xs">
+                <div class="w-12 h-12 rounded-xl bg-sky-50 flex items-center justify-center text-sky-600">
                   <i data-lucide="map-pin" class="w-5 h-5"></i>
                 </div>
                 <div>
-                  <div class="text-xs text-slate-400">Lokasi Kerja</div>
-                  <div class="text-sm font-semibold text-white">Jakarta, Indonesia (Available Remote Worldwide)</div>
+                  <div class="text-xs text-slate-600 font-medium">Lokasi Kerja</div>
+                  <div class="text-sm font-bold text-slate-900">Jakarta, Indonesia (Available Remote Worldwide)</div>
                 </div>
               </div>
             </div>
@@ -507,57 +497,57 @@
 
           <!-- Contact Form Column -->
           <div class="lg:col-span-7">
-            <div class="glass-card rounded-3xl p-8 sm:p-10 border border-white/10 shadow-2xl relative">
-              <h3 class="text-xl sm:text-2xl font-bold text-white mb-2">Formulir Pesan Pengunjung</h3>
-              <p class="text-xs sm:text-sm text-slate-400 mb-8">Pesan Anda akan otomatis tersimpan di tab "Messages" database Google Sheets saya.</p>
+            <div class="bg-white rounded-3xl p-8 sm:p-10 border border-slate-200/80 shadow-xl shadow-slate-200/40 relative">
+              <h3 class="text-xl sm:text-2xl font-extrabold text-slate-900 mb-2">Formulir Pesan Pengunjung</h3>
+              <p class="text-xs sm:text-sm text-slate-600 mb-8">Pesan Anda akan otomatis tersimpan di tab "Messages" database Google Sheets saya.</p>
 
               <form id="contact-form" class="space-y-5">
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                   <!-- Name Input -->
                   <div>
-                    <label for="contact-name" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Nama Lengkap *</label>
+                    <label for="contact-name" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Nama Lengkap *</label>
                     <input 
                       type="text" 
                       id="contact-name" 
                       required 
                       placeholder="e.g. Budi Santoso"
-                      class="w-full px-4 py-3 rounded-xl bg-slate-900/80 border border-slate-700/80 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"
+                      class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 text-sm focus:outline-none focus:bg-white focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all font-medium"
                     />
                   </div>
 
                   <!-- Email Input -->
                   <div>
-                    <label for="contact-email" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Alamat Email *</label>
+                    <label for="contact-email" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Alamat Email *</label>
                     <input 
                       type="email" 
                       id="contact-email" 
                       required 
                       placeholder="budi@example.com"
-                      class="w-full px-4 py-3 rounded-xl bg-slate-900/80 border border-slate-700/80 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"
+                      class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 text-sm focus:outline-none focus:bg-white focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all font-medium"
                     />
                   </div>
                 </div>
 
                 <!-- Subject Input -->
                 <div>
-                  <label for="contact-subject" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Subjek / Keperluan</label>
+                  <label for="contact-subject" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Subjek / Keperluan</label>
                   <input 
                     type="text" 
                     id="contact-subject" 
                     placeholder="e.g. Diskusi Proyek Web E-Commerce"
-                    class="w-full px-4 py-3 rounded-xl bg-slate-900/80 border border-slate-700/80 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"
+                    class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 text-sm focus:outline-none focus:bg-white focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all font-medium"
                   />
                 </div>
 
                 <!-- Message Input -->
                 <div>
-                  <label for="contact-message" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Pesan Anda *</label>
+                  <label for="contact-message" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Pesan Anda *</label>
                   <textarea 
                     id="contact-message" 
                     rows="5" 
                     required 
                     placeholder="Ceritakan gambaran proyek atau pertanyaan Anda di sini..."
-                    class="w-full px-4 py-3 rounded-xl bg-slate-900/80 border border-slate-700/80 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all resize-y"
+                    class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 text-sm focus:outline-none focus:bg-white focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all resize-y font-medium"
                   ></textarea>
                 </div>
 
@@ -565,7 +555,7 @@
                 <button 
                   type="submit" 
                   id="contact-submit-btn" 
-                  class="w-full py-4 rounded-xl font-bold text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 transition-all shadow-xl shadow-indigo-600/30 flex items-center justify-center gap-2 hover:scale-[1.01] active:scale-[0.99]"
+                  class="w-full py-4 rounded-xl font-bold text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 transition-all shadow-lg shadow-indigo-600/25 flex items-center justify-center gap-2 hover:scale-[1.01] active:scale-[0.99]"
                 >
                   <i data-lucide="send" class="w-4 h-4"></i>
                   <span>Kirim Pesan Sekarang</span>
@@ -584,29 +574,29 @@
   <!-- ====================================================================
        FOOTER
        ==================================================================== -->
-  <footer class="border-t border-slate-800/80 bg-dark-950 py-12">
+  <footer class="border-t border-slate-200 bg-white py-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
       <div class="flex items-center gap-3">
         <div class="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center text-white font-bold text-sm">
           AR
         </div>
-        <span class="text-sm text-slate-400">
-          &copy; <span id="footer-year">2026</span> <strong id="footer-name" class="text-slate-200">Ahmad Rizky Pratama</strong>. Seluruh hak cipta dilindungi.
+        <span class="text-sm text-slate-600 font-medium">
+          &copy; <span id="footer-year">2026</span> <strong id="footer-name" class="text-slate-900">Ahmad Rizky Pratama</strong>. Seluruh hak cipta dilindungi.
         </span>
       </div>
 
       <!-- Social Links -->
-      <div class="flex items-center gap-4 text-slate-400">
-        <a id="link-github-footer" href="https://github.com" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors" title="GitHub">
+      <div class="flex items-center gap-4 text-slate-600">
+        <a id="link-github-footer" href="https://github.com" target="_blank" rel="noopener noreferrer" class="hover:text-slate-900 transition-colors" title="GitHub">
           <i data-lucide="github" class="w-5 h-5"></i>
         </a>
-        <a id="link-linkedin-footer" href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="hover:text-cyan-400 transition-colors" title="LinkedIn">
+        <a id="link-linkedin-footer" href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="hover:text-indigo-600 transition-colors" title="LinkedIn">
           <i data-lucide="linkedin" class="w-5 h-5"></i>
         </a>
-        <a id="link-instagram-footer" href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="hover:text-pink-400 transition-colors" title="Instagram">
+        <a id="link-instagram-footer" href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="hover:text-pink-600 transition-colors" title="Instagram">
           <i data-lucide="instagram" class="w-5 h-5"></i>
         </a>
-        <a href="#home" class="ml-4 p-2 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-300 transition-colors" title="Kembali ke Atas">
+        <a href="#home" class="ml-4 p-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors" title="Kembali ke Atas">
           <i data-lucide="arrow-up" class="w-4 h-4"></i>
         </a>
       </div>
@@ -616,8 +606,8 @@
   <!-- ====================================================================
        MODAL: DETAIL PROYEK
        ==================================================================== -->
-  <div id="project-detail-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md overflow-y-auto">
-    <div class="relative w-full max-w-3xl glass-card rounded-2xl border border-slate-700/80 overflow-hidden my-8 shadow-2xl animate-fade-in">
+  <div id="project-detail-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm overflow-y-auto">
+    <div class="relative w-full max-w-3xl bg-white rounded-3xl border border-slate-200 overflow-hidden my-8 shadow-2xl">
       <div id="project-modal-content">
         <!-- Content injected dynamically -->
       </div>
@@ -627,33 +617,33 @@
   <!-- ====================================================================
        MODAL: SETTING URL GOOGLE APPS SCRIPT
        ==================================================================== -->
-  <div id="api-settings-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
-    <div class="relative w-full max-w-lg glass-card rounded-2xl p-6 sm:p-8 border border-indigo-500/30 shadow-2xl space-y-6">
-      <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+  <div id="api-settings-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm">
+    <div class="relative w-full max-w-lg bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-2xl space-y-6">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-4">
         <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-xl bg-indigo-500/10 flex items-center justify-center text-indigo-400">
+          <div class="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center text-indigo-600">
             <i data-lucide="link" class="w-5 h-5"></i>
           </div>
           <div>
-            <h3 class="font-bold text-lg text-white">Hubungkan Google Apps Script</h3>
-            <p class="text-xs text-slate-400">Backend API & Database Google Sheets</p>
+            <h3 class="font-bold text-lg text-slate-900">Hubungkan Google Apps Script</h3>
+            <p class="text-xs text-slate-600">Backend API & Database Google Sheets</p>
           </div>
         </div>
-        <button id="btn-close-api-settings" class="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800">
+        <button id="btn-close-api-settings" class="p-1 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors">
           <i data-lucide="x" class="w-5 h-5"></i>
         </button>
       </div>
 
       <div class="space-y-4">
         <div>
-          <label for="input-api-url" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Web App Deployment URL</label>
+          <label for="input-api-url" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Web App Deployment URL</label>
           <input 
             type="url" 
             id="input-api-url" 
             placeholder="https://script.google.com/macros/s/AKfycb.../exec"
-            class="w-full px-4 py-3 rounded-xl bg-slate-900/90 border border-slate-700 text-white placeholder-slate-500 text-xs focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 font-mono transition-all"
+            class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 text-xs focus:outline-none focus:bg-white focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 font-mono transition-all"
           />
-          <p class="text-[11px] text-slate-400 mt-2">
+          <p class="text-[11px] text-slate-600 mt-2 font-medium">
             Salin URL dari menu <strong>Deploy &gt; Manage Deployments &gt; Web app URL</strong> (.../exec).
           </p>
         </div>
@@ -662,28 +652,28 @@
         <div id="api-test-feedback" class="hidden p-3.5 rounded-xl text-xs border transition-all"></div>
 
         <!-- Deployment Requirements Checklist -->
-        <div class="p-4 rounded-xl bg-slate-900/70 border border-slate-800 text-xs text-slate-300 space-y-2">
-          <div class="font-semibold text-indigo-400 flex items-center gap-1.5">
+        <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-700 space-y-2">
+          <div class="font-bold text-indigo-700 flex items-center gap-1.5">
             <i data-lucide="shield-alert" class="w-4 h-4"></i> Syarat Akses Google Apps Script:
           </div>
-          <ul class="space-y-1.5 text-slate-400 text-[11px] list-disc list-inside">
-            <li><strong class="text-slate-200">Execute as:</strong> "Me" (email Anda)</li>
-            <li><strong class="text-amber-400">Who has access:</strong> Wajib dipilih <strong class="text-emerald-400">"Anyone" (Siapa saja)</strong>, bukan "Only myself"</li>
-            <li>Pastikan URL berakhiran <code class="text-indigo-300 font-mono">/exec</code> (bukan <code class="text-rose-400 font-mono">/dev</code> atau link Google Sheets)</li>
+          <ul class="space-y-1.5 text-slate-600 text-[11px] list-disc list-inside">
+            <li><strong class="text-slate-800">Execute as:</strong> "Me" (email Anda)</li>
+            <li><strong class="text-amber-600">Who has access:</strong> Wajib dipilih <strong class="text-emerald-600">"Anyone" (Siapa saja)</strong></li>
+            <li>Pastikan URL berakhiran <code class="text-indigo-600 font-mono">/exec</code> (bukan link Google Sheets)</li>
           </ul>
         </div>
       </div>
 
-      <div class="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-slate-800">
-        <button type="button" id="btn-reset-demo-api" class="text-xs text-slate-400 hover:text-amber-400 transition-colors">
+      <div class="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-slate-100">
+        <button type="button" id="btn-reset-demo-api" class="text-xs font-semibold text-slate-500 hover:text-amber-600 transition-colors">
           Reset ke Mode Demo
         </button>
         <div class="flex items-center gap-2">
-          <button type="button" id="btn-test-api-url" class="px-4 py-2.5 rounded-xl border border-indigo-500/40 text-indigo-300 hover:bg-indigo-500/10 text-xs sm:text-sm font-semibold transition-all flex items-center gap-1.5">
+          <button type="button" id="btn-test-api-url" class="px-4 py-2.5 rounded-xl border border-indigo-200 text-indigo-700 hover:bg-indigo-50 text-xs sm:text-sm font-bold transition-all flex items-center gap-1.5">
             <i data-lucide="activity" class="w-4 h-4"></i>
             <span>Uji Koneksi</span>
           </button>
-          <button type="button" id="btn-save-api-url" class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs sm:text-sm font-semibold transition-all shadow-lg shadow-indigo-600/30">
+          <button type="button" id="btn-save-api-url" class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs sm:text-sm font-bold transition-all shadow-md shadow-indigo-600/20">
             Simpan & Hubungkan
           </button>
         </div>
