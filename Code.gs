@@ -189,14 +189,26 @@ function doGet(e) {
 
   // 3. Render HTML Page untuk Web App (Google Apps Script Web App Host)
   if (page === 'admin') {
-    return HtmlService.createHtmlOutputFromFile('Admin')
+    let output;
+    try {
+      output = HtmlService.createHtmlOutputFromFile('admin');
+    } catch (e) {
+      output = HtmlService.createHtmlOutputFromFile('Admin');
+    }
+    return output
       .setTitle('Admin Dashboard | Web Profil')
       .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL)
       .addMetaTag('viewport', 'width=device-width, initial-scale=1');
   }
 
-  // Halaman default: Halaman Profil Publik (Index.html)
-  return HtmlService.createHtmlOutputFromFile('Index')
+  // Halaman default: Halaman Profil Publik (index.html)
+  let defaultOutput;
+  try {
+    defaultOutput = HtmlService.createHtmlOutputFromFile('index');
+  } catch (e) {
+    defaultOutput = HtmlService.createHtmlOutputFromFile('Index');
+  }
+  return defaultOutput
     .setTitle('Portfolio & Profile')
     .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL)
     .addMetaTag('viewport', 'width=device-width, initial-scale=1');

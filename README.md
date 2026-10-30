@@ -9,8 +9,9 @@ Project website profil pribadi & portofolio interaktif modern dengan **Admin Das
 ```text
 profilku/
 ├── Code.gs             # Backend Google Apps Script (doGet, doPost, API, Database CRUD)
-├── Index.html          # Frontend Web Profil Publik (Hero, About, Projects, Contact, Footer)
-├── Admin.html          # Admin Dashboard (Autentikasi Passcode, Tab Management, CRUD)
+├── index.html          # Frontend Web Profil Publik (Hero, About, Projects, Contact, Footer)
+├── admin.html          # Admin Dashboard (Autentikasi Passcode, Tab Management, CRUD)
+├── vercel.json         # Konfigurasi routing & clean URLs untuk deployment Vercel
 ├── js/
 │   ├── api.js          # Utilitas terpusat apiCall, penanganan CORS, Toast & Demo Mock Data
 │   ├── main.js         # Logika interaktif halaman profil publik & fetch data portofolio
