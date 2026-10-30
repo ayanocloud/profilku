@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard | Kelola Profil & Portofolio</title>
+  
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            dark: {
+              950: '#070a12',
+              900: '#0b0f19',
+              850: '#101626',
+              800: '#161f36',
+              700: '#232f4e'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    .glass-card {
+      background: rgba(16, 22, 38, 0.7);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .glass-nav {
+      background: rgba(7, 10, 18, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    }
+    ::-webkit-scrollbar {
+      width: 7px;
+      height: 7px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0b0f19;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1e293b;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body class="bg-dark-950 text-slate-100 font-sans antialiased selection:bg-indigo-500 selection:text-white min-h-screen">
+
+  <!-- ====================================================================
+       1. AUTHENTICATION / LOGIN VIEW (PASSCODE LOCK SCREEN)
+       ==================================================================== -->
+  <div id="admin-login-view" class="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
+    <!-- Ambient Background Lights -->
+    <div class="absolute -top-32 -left-32 w-80 h-80 bg-indigo-600/20 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute -bottom-32 -right-32 w-80 h-80 bg-purple-600/20 rounded-full blur-3xl pointer-events-none"></div>
+
+    <div class="relative w-full max-w-md glass-card rounded-3xl p-8 sm:p-10 border border-white/10 shadow-2xl">
+      <div class="text-center mb-8">
+        <div class="w-14 h-14 mx-auto mb-4 rounded-2xl bg-gradient-to-tr from-indigo-600 to-purple-600 p-0.5 shadow-xl shadow-indigo-600/30">
+          <div class="w-full h-full bg-dark-950 rounded-[14px] flex items-center justify-center text-indigo-400">
+            <i data-lucide="lock" class="w-7 h-7"></i>
+          </div>
+        </div>
+        <h1 class="text-2xl font-extrabold text-white tracking-tight">Admin Authentication</h1>
+        <p class="text-xs sm:text-sm text-slate-400 mt-2">
+          Masukkan Passcode Administrator untuk mengelola konten website & database Google Sheets.
+        </p>
+      </div>
+
+      <form id="admin-login-form" class="space-y-5">
+        <div>
+          <label for="login-passcode" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Admin Passcode</label>
+          <div class="relative">
+            <input 
+              type="password" 
+              id="login-passcode" 
+              required 
+              placeholder="Masukkan passcode rahasia..."
+              class="w-full px-4 py-3.5 pr-11 rounded-xl bg-slate-900/90 border border-slate-700/80 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"
+            />
+            <button 
+              type="button" 
+              onclick="togglePasscodeVisibility('login-passcode')" 
+              class="absolute right-3 top-3.5 text-slate-400 hover:text-white"
+            >
+              <i data-lucide="eye" class="w-5 h-5"></i>
+            </button>
+          </div>
+          <p class="text-[11px] text-slate-400 mt-2 flex items-center gap-1">
+            <i data-lucide="info" class="w-3.5 h-3.5 text-indigo-400"></i> Passcode default: <code class="text-indigo-300 font-mono">admin123</code>
+          </p>
+        </div>
+
+        <button 
+          type="submit" 
+          id="login-submit-btn" 
+          class="w-full py-3.5 rounded-xl font-bold text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 transition-all shadow-xl shadow-indigo-600/30 flex items-center justify-center gap-2 hover:scale-[1.01]"
+        >
+          <i data-lucide="log-in" class="w-4 h-4"></i>
+          <span>Masuk Dashboard</span>
+        </button>
+      </form>
+
+      <div class="pt-6 mt-6 border-t border-slate-800 flex items-center justify-between text-xs text-slate-400">
+        <a href="Index.html" class="hover:text-white flex items-center gap-1.5 transition-colors">
+          <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i> Kembali ke Website
+        </a>
+        <button onclick="document.getElementById('admin-api-settings-btn').click()" class="hover:text-indigo-400 flex items-center gap-1 transition-colors">
+          <i data-lucide="settings" class="w-3.5 h-3.5"></i> Setting API
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====================================================================
+       2. MAIN ADMIN DASHBOARD VIEW (PROTECTED)
+       ==================================================================== -->
+  <div id="admin-dashboard-view" class="hidden min-h-screen flex flex-col">
+    
+    <!-- Top Navigation Bar -->
+    <header class="glass-nav sticky top-0 z-30">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 py-3.5 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-xl bg-indigo-600 flex items-center justify-center text-white font-extrabold text-sm shadow-md shadow-indigo-600/40">
+            AD
+          </div>
+          <div>
+            <h2 class="font-bold text-white text-sm sm:text-base tracking-tight">Admin Management Panel</h2>
+            <p class="text-[11px] text-slate-400">Halo, <span id="admin-profile-name" class="text-indigo-400 font-medium">Administrator</span></p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2 sm:gap-3">
+          <button id="admin-api-settings-btn" class="p-2 sm:px-3 sm:py-2 rounded-xl glass-card text-xs font-semibold text-slate-300 hover:text-white hover:border-slate-600 flex items-center gap-1.5 transition-all" title="Konfigurasi Google Apps Script">
+            <i data-lucide="settings" class="w-4 h-4 text-indigo-400"></i>
+            <span class="hidden sm:inline">API Config</span>
+          </button>
+
+          <a href="Index.html" target="_blank" class="p-2 sm:px-3.5 sm:py-2 rounded-xl glass-card text-xs font-semibold text-slate-300 hover:text-white hover:border-slate-600 flex items-center gap-1.5 transition-all">
+            <i data-lucide="external-link" class="w-4 h-4 text-emerald-400"></i>
+            <span class="hidden sm:inline">Lihat Web Publik</span>
+          </a>
+
+          <button id="admin-logout-btn" class="p-2 sm:px-3.5 sm:py-2 rounded-xl bg-rose-600/10 border border-rose-500/20 text-xs font-semibold text-rose-400 hover:bg-rose-600 hover:text-white transition-all flex items-center gap-1.5">
+            <i data-lucide="log-out" class="w-4 h-4"></i>
+            <span class="hidden sm:inline">Keluar</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full flex-1">
+      
+      <!-- Quick Statistics Summary Cards -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-8">
+        <div class="glass-card rounded-2xl p-5 border border-white/5 flex items-center justify-between">
+          <div>
+            <div class="text-xs font-medium text-slate-400 uppercase tracking-wider">Total Portofolio</div>
+            <div id="stat-total-projects" class="text-2xl font-extrabold text-white mt-1">0</div>
+          </div>
+          <div class="w-12 h-12 rounded-xl bg-indigo-500/10 flex items-center justify-center text-indigo-400">
+            <i data-lucide="briefcase" class="w-6 h-6"></i>
+          </div>
+        </div>
+
+        <div class="glass-card rounded-2xl p-5 border border-white/5 flex items-center justify-between">
+          <div>
+            <div class="text-xs font-medium text-slate-400 uppercase tracking-wider">Pesan Pengunjung</div>
+            <div id="stat-total-messages" class="text-2xl font-extrabold text-white mt-1">0</div>
+          </div>
+          <div class="w-12 h-12 rounded-xl bg-purple-500/10 flex items-center justify-center text-purple-400">
+            <i data-lucide="message-square" class="w-6 h-6"></i>
+          </div>
+        </div>
+
+        <div class="glass-card rounded-2xl p-5 border border-white/5 flex items-center justify-between">
+          <div>
+            <div class="text-xs font-medium text-slate-400 uppercase tracking-wider">Status Backend API</div>
+            <div id="stat-api-status" class="text-lg font-bold text-emerald-400 mt-1">Pemeriksaan...</div>
+          </div>
+          <div class="w-12 h-12 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-400">
+            <i data-lucide="database" class="w-6 h-6"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Layout: Sidebar Tab Navigation + Tab Content -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        
+        <!-- Sidebar Navigation Buttons -->
+        <div class="lg:col-span-3">
+          <div class="glass-card rounded-2xl p-3 border border-white/5 space-y-1.5 sticky top-28">
+            <div class="px-3 py-2 text-[11px] font-bold text-slate-400 uppercase tracking-wider">Menu Manajemen</div>
+            
+            <button id="tab-btn-projects" class="tab-nav-btn active w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-semibold bg-indigo-600 text-white shadow-lg shadow-indigo-600/25 transition-all">
+              <span class="flex items-center gap-3">
+                <i data-lucide="layers" class="w-4 h-4"></i>
+                <span>Kelola Portofolio</span>
+              </span>
+            </button>
+
+            <button id="tab-btn-profile" class="tab-nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 transition-all">
+              <i data-lucide="user" class="w-4 h-4"></i>
+              <span>Profil & Kontak</span>
+            </button>
+
+            <button id="tab-btn-messages" class="tab-nav-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 transition-all">
+              <span class="flex items-center gap-3">
+                <i data-lucide="inbox" class="w-4 h-4"></i>
+                <span>Pesan Masuk</span>
+              </span>
+              <span id="badge-messages-count" class="px-2 py-0.5 rounded-full text-[11px] font-bold bg-slate-800 text-indigo-300 border border-slate-700">0</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Content Area -->
+        <div class="lg:col-span-9">
+
+          <!-- ==========================================================
+               TAB 1: KELOLA PORTOFOLIO (PROJECTS)
+               ========================================================== -->
+          <div id="tab-content-projects" class="space-y-6">
+            <div class="glass-card rounded-2xl p-6 border border-white/5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <h3 class="text-xl font-bold text-white tracking-tight">Daftar Portofolio Proyek</h3>
+                <p class="text-xs text-slate-400 mt-1">Tambah, perbarui, dan hapus proyek yang tampil di halaman portofolio pengunjung.</p>
+              </div>
+              <button id="btn-open-project-modal" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-white bg-indigo-600 hover:bg-indigo-500 transition-all shadow-lg shadow-indigo-600/30 text-xs sm:text-sm shrink-0">
+                <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                <span>Tambah Proyek Baru</span>
+              </button>
+            </div>
+
+            <!-- Projects Table -->
+            <div class="glass-card rounded-2xl border border-white/5 overflow-hidden">
+              <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                  <thead>
+                    <tr class="border-b border-slate-800 bg-slate-900/80 text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                      <th class="px-6 py-4">Proyek & Stack</th>
+                      <th class="px-6 py-4">Kategori</th>
+                      <th class="px-6 py-4">Tautan</th>
+                      <th class="px-6 py-4 text-right">Aksi</th>
+                    </tr>
+                  </thead>
+                  <tbody id="admin-projects-tbody" class="divide-y divide-slate-800/60 text-sm">
+                    <!-- Populated dynamically via admin.js -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- ==========================================================
+               TAB 2: KELOLA PROFIL (PROFILE)
+               ========================================================== -->
+          <div id="tab-content-profile" class="hidden space-y-6">
+            <div class="glass-card rounded-2xl p-6 sm:p-8 border border-white/5">
+              <div class="mb-6 pb-6 border-b border-slate-800">
+                <h3 class="text-xl font-bold text-white tracking-tight">Informasi Pribadi & Kontak</h3>
+                <p class="text-xs text-slate-400 mt-1">Perbarui biodata, kontak, dan tautan sosial media yang tersimpan di sheet Profile.</p>
+              </div>
+
+              <form id="admin-profile-form" class="space-y-6">
+                <!-- Row 1: Name & Role -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                  <div>
+                    <label for="form-prof-name" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Nama Lengkap *</label>
+                    <input type="text" id="form-prof-name" required class="w-full px-4 py-3 rounded-xl bg-slate-900/80 border border-slate-700/80 text-white text-sm focus:outline-none focus:border-indigo-500" />
+                  </div>
+                  <div>
+                    <label for="form-prof-role" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Role / Headline Profesi *</label>
+                    <input type="text" id="form-prof-role" required class="w-full px-4 py-3 rounded-xl bg-slate-900/80 border border-slate-700/80 text-white text-sm focus:outline-none focus:border-indigo-500" />
+                  </div>
+                </div>
+
+                <!-- Row 2: Bio -->
+                <div>
+                  <label for="form-prof-bio" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Bio Singkat / Tentang Saya *</label>
+                  <textarea id="form-prof-bio" rows="4" required class="w-full px-4 py-3 rounded-xl bg-slate-900/80 border border-slate-700/80 text-white text-sm focus:outline-none focus:border-indigo-500 resize-y"></textarea>
+                </div>
+
+                <!-- Row 3: Email & Phone -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                  <div>
+                    <label for="form-prof-email" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Alamat Email *</label>
+                    <input type="email" id="form-prof-email" required class="w-full px-4 py-3 rounded-xl bg-slate-900/80 border border-slate-700/80 text-white text-sm focus:outline-none focus:border-indigo-500" />
+                  </div>
+                  <div>
+                    <label for="form-prof-phone" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Nomor Telepon / WA *</label>
+                    <input type="text" id="form-prof-phone" required class="w-full px-4 py-3 rounded-xl bg-slate-900/80 border border-slate-700/80 text-white text-sm focus:outline-none focus:border-indigo-500" />
+                  </div>
+                </div>
+
+                <!-- Row 4: Social Links -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+                  <div>
+                    <label for="form-prof-github" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">URL GitHub</label>
+                    <input type="url" id="form-prof-github" placeholder="https://github.com/..." class="w-full px-4 py-3 rounded-xl bg-slate-900/80 border border-slate-700/80 text-white text-sm focus:outline-none focus:border-indigo-500" />
+                  </div>
+                  <div>
+                    <label for="form-prof-linkedin" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">URL LinkedIn</label>
+                    <input type="url" id="form-prof-linkedin" placeholder="https://linkedin.com/in/..." class="w-full px-4 py-3 rounded-xl bg-slate-900/80 border border-slate-700/80 text-white text-sm focus:outline-none focus:border-indigo-500" />
+                  </div>
+                  <div>
+                    <label for="form-prof-instagram" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">URL Instagram</label>
+                    <input type="url" id="form-prof-instagram" placeholder="https://instagram.com/..." class="w-full px-4 py-3 rounded-xl bg-slate-900/80 border border-slate-700/80 text-white text-sm focus:outline-none focus:border-indigo-500" />
+                  </div>
+                </div>
+
+                <!-- Row 5: Admin Passcode -->
+                <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800">
+                  <label for="form-prof-passcode" class="block text-xs font-semibold text-amber-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                    <i data-lucide="key" class="w-4 h-4"></i> Ubah Admin Passcode (Kunci Keamanan)
+                  </label>
+                  <input type="text" id="form-prof-passcode" required class="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-700 text-white text-sm focus:outline-none focus:border-indigo-500 font-mono" />
+                  <p class="text-[11px] text-slate-400 mt-2">Passcode ini digunakan untuk verifikasi login ke dashboard dan eksekusi perubahan data di Google Sheets.</p>
+                </div>
+
+                <!-- Save Button -->
+                <div class="pt-4 flex justify-end">
+                  <button type="submit" id="btn-save-profile" class="px-6 py-3 rounded-xl font-bold text-white bg-indigo-600 hover:bg-indigo-500 transition-all shadow-lg shadow-indigo-600/30 flex items-center gap-2">
+                    <i data-lucide="check" class="w-4 h-4"></i>
+                    <span>Simpan Perubahan Profil</span>
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <!-- ==========================================================
+               TAB 3: PESAN MASUK (MESSAGES)
+               ========================================================== -->
+          <div id="tab-content-messages" class="hidden space-y-6">
+            <div class="glass-card rounded-2xl p-6 border border-white/5">
+              <h3 class="text-xl font-bold text-white tracking-tight">Kotak Masuk Pesan Pengunjung</h3>
+              <p class="text-xs text-slate-400 mt-1">Daftar pertanyaan dan tawaran kerjasama yang dikirim pengunjung melalui formulir kontak.</p>
+            </div>
+
+            <!-- Messages Table -->
+            <div class="glass-card rounded-2xl border border-white/5 overflow-hidden">
+              <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                  <thead>
+                    <tr class="border-b border-slate-800 bg-slate-900/80 text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                      <th class="px-6 py-4">Waktu Kirim</th>
+                      <th class="px-6 py-4">Pengirim & Email</th>
+                      <th class="px-6 py-4">Subjek</th>
+                      <th class="px-6 py-4">Cuplikan Pesan</th>
+                      <th class="px-6 py-4 text-right">Aksi</th>
+                    </tr>
+                  </thead>
+                  <tbody id="admin-messages-tbody" class="divide-y divide-slate-800/60 text-sm">
+                    <!-- Populated dynamically via admin.js -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ====================================================================
+       MODAL: FORM TAMBAH / EDIT PROYEK
+       ==================================================================== -->
+  <div id="project-form-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md overflow-y-auto">
+    <div class="relative w-full max-w-2xl glass-card rounded-2xl p-6 sm:p-8 border border-indigo-500/30 my-8 shadow-2xl">
+      <div class="flex items-center justify-between pb-4 border-b border-slate-800 mb-6">
+        <h3 id="modal-project-title" class="font-bold text-lg text-white">Tambah Portofolio Baru</h3>
+        <button id="btn-close-project-modal" class="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <form id="project-form" class="space-y-4">
+        <!-- Title & Category -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label for="proj-form-title" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Judul Proyek *</label>
+            <input type="text" id="proj-form-title" required placeholder="e.g. Smart Analytics Dashboard" class="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-sm focus:outline-none focus:border-indigo-500" />
+          </div>
+          <div>
+            <label for="proj-form-category" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Kategori *</label>
+            <input type="text" id="proj-form-category" required placeholder="e.g. Web Development, AI, Mobile" class="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-sm focus:outline-none focus:border-indigo-500" />
+          </div>
+        </div>
+
+        <!-- Tech Stack -->
+        <div>
+          <label for="proj-form-tech" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Tech Stack (Pisahkan dengan koma) *</label>
+          <input type="text" id="proj-form-tech" required placeholder="e.g. React, Next.js, Tailwind, PostgreSQL" class="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-sm focus:outline-none focus:border-indigo-500" />
+        </div>
+
+        <!-- Image URL & Project URL -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label for="proj-form-image" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">URL Gambar Sampul *</label>
+            <input type="url" id="proj-form-image" required placeholder="https://images.unsplash.com/..." class="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-sm focus:outline-none focus:border-indigo-500" />
+          </div>
+          <div>
+            <label for="proj-form-url" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">URL Proyek / GitHub</label>
+            <input type="url" id="proj-form-url" placeholder="https://github.com/..." class="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-sm focus:outline-none focus:border-indigo-500" />
+          </div>
+        </div>
+
+        <!-- Description -->
+        <div>
+          <label for="proj-form-desc" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Deskripsi Proyek *</label>
+          <textarea id="proj-form-desc" rows="4" required placeholder="Ceritakan fitur, solusi, dan dampak dari proyek ini..." class="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-sm focus:outline-none focus:border-indigo-500 resize-y"></textarea>
+        </div>
+
+        <!-- Buttons -->
+        <div class="flex items-center justify-end gap-3 pt-4 border-t border-slate-800">
+          <button type="button" id="btn-cancel-project-modal" class="px-4 py-2.5 rounded-xl text-slate-400 hover:text-white text-sm font-medium transition-colors">
+            Batal
+          </button>
+          <button type="submit" id="btn-save-project-form" class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold transition-all shadow-lg shadow-indigo-600/30">
+            Simpan Proyek
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ====================================================================
+       MODAL: BACA PESAN DETAIL
+       ==================================================================== -->
+  <div id="message-detail-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
+    <div class="relative w-full max-w-lg glass-card rounded-2xl p-6 sm:p-8 border border-white/10 shadow-2xl">
+      <div id="message-detail-content">
+        <!-- Content injected dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ====================================================================
+       MODAL: SETTING URL API GOOGLE APPS SCRIPT
+       ==================================================================== -->
+  <div id="admin-api-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
+    <div class="relative w-full max-w-lg glass-card rounded-2xl p-6 sm:p-8 border border-indigo-500/30 shadow-2xl space-y-6">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+        <h3 class="font-bold text-lg text-white">Konfigurasi API Google Apps Script</h3>
+        <button id="admin-close-api-modal" class="p-1 rounded-lg text-slate-400 hover:text-white">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div>
+        <label for="admin-input-api-url" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Web App URL</label>
+        <input 
+          type="url" 
+          id="admin-input-api-url" 
+          placeholder="https://script.google.com/macros/s/AKfycb.../exec"
+          class="w-full px-4 py-3 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs font-mono focus:outline-none focus:border-indigo-500"
+        />
+        <p class="text-[11px] text-slate-400 mt-2">
+          Masukkan Web App URL yang didapatkan saat deploy Google Apps Script dengan opsi akses <em>"Anyone"</em>.
+        </p>
+      </div>
+
+      <div class="flex items-center justify-end gap-3 pt-4 border-t border-slate-800">
+        <button onclick="document.getElementById('admin-api-modal').classList.add('hidden')" class="px-4 py-2.5 rounded-xl text-slate-400 hover:text-white text-sm font-medium">
+          Tutup
+        </button>
+        <button id="admin-save-api-url" class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold">
+          Simpan URL
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none max-w-sm w-full px-4 sm:px-0"></div>
+
+  <!-- Scripts -->
+  <script src="js/api.js"></script>
+  <script src="js/admin.js"></script>
+
+  <script>
+    function togglePasscodeVisibility(id) {
+      const el = document.getElementById(id);
+      if (el) {
+        el.type = el.type === 'password' ? 'text' : 'password';
+      }
+    }
+  </script>
+</body>
+</html>

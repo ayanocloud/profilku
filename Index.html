@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ahmad Rizky Pratama | Full Stack Developer & Cloud Architect</title>
+  <meta name="description" content="Web Profil & Portofolio Interaktif profesional. Eksplorasi karya aplikasi web, arsitektur cloud, dan solusi digital modern." />
+  
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            dark: {
+              950: '#070a12',
+              900: '#0b0f19',
+              850: '#101626',
+              800: '#161f36',
+              700: '#232f4e'
+            }
+          },
+          animation: {
+            'blob': 'blob 7s infinite',
+            'pulse-subtle': 'pulseSubtle 3s infinite',
+          },
+          keyframes: {
+            blob: {
+              '0%': { transform: 'translate(0px, 0px) scale(1)' },
+              '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+              '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+              '100%': { transform: 'translate(0px, 0px) scale(1)' },
+            },
+            pulseSubtle: {
+              '0%, 100%': { opacity: 1 },
+              '50%': { opacity: 0.6 }
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    /* Custom Smooth Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #070a12;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1e293b;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #334155;
+    }
+    .glass-card {
+      background: rgba(16, 22, 38, 0.65);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .glass-nav {
+      background: rgba(7, 10, 18, 0.82);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    }
+  </style>
+</head>
+<body class="bg-dark-950 text-slate-100 font-sans antialiased selection:bg-indigo-500 selection:text-white min-h-screen relative overflow-x-hidden">
+
+  <!-- Ambient Glow Background Blobs -->
+  <div class="fixed inset-0 pointer-events-none -z-10 overflow-hidden">
+    <div class="absolute -top-40 -left-40 w-96 h-96 bg-indigo-600/15 rounded-full blur-3xl filter animate-blob"></div>
+    <div class="absolute top-1/3 -right-40 w-96 h-96 bg-purple-600/15 rounded-full blur-3xl filter animate-blob animation-delay-2000"></div>
+    <div class="absolute -bottom-40 left-1/3 w-96 h-96 bg-cyan-600/15 rounded-full blur-3xl filter animate-blob animation-delay-4000"></div>
+    <div class="absolute inset-0 bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:24px_24px] opacity-25"></div>
+  </div>
+
+  <!-- Banner Pemberitahuan Mode Demo / Setting API -->
+  <div id="demo-mode-notice" class="hidden bg-gradient-to-r from-indigo-900/90 via-purple-900/90 to-slate-900/90 border-b border-indigo-500/30 py-2.5 px-4 text-xs sm:text-sm text-center text-slate-200">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-center gap-2">
+      <span class="inline-flex items-center gap-1.5 font-medium text-indigo-300">
+        <i data-lucide="info" class="w-4 h-4"></i> Mode Pratinjau Demo Aktif:
+      </span>
+      <span>Belum menghubungkan Google Apps Script? Anda dapat menghubungkan URL Web App sekarang.</span>
+      <button id="btn-open-api-settings" class="ml-2 underline font-semibold text-white hover:text-indigo-300 transition-colors">
+        Atur URL API
+      </button>
+    </div>
+  </div>
+
+  <!-- ====================================================================
+       STICKY NAVBAR
+       ==================================================================== -->
+  <header class="sticky top-0 z-40 glass-nav transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      <!-- Logo / Brand -->
+      <a href="#home" class="flex items-center gap-3 group">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 via-purple-600 to-cyan-400 p-0.5 shadow-lg shadow-indigo-500/30 transition-transform group-hover:scale-105">
+          <div class="w-full h-full bg-dark-950 rounded-[10px] flex items-center justify-center font-extrabold text-white text-lg">
+            AR
+          </div>
+        </div>
+        <div class="flex flex-col">
+          <span id="nav-brand-name" class="font-bold text-base sm:text-lg tracking-tight text-white group-hover:text-indigo-400 transition-colors">
+            Ahmad Rizky Pratama
+          </span>
+          <span class="text-[11px] font-medium text-slate-400 tracking-wider uppercase">Portfolio & Insights</span>
+        </div>
+      </a>
+
+      <!-- Desktop Navigation -->
+      <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-300">
+        <a href="#home" class="hover:text-indigo-400 transition-colors">Beranda</a>
+        <a href="#about" class="hover:text-indigo-400 transition-colors">Tentang</a>
+        <a href="#projects" class="hover:text-indigo-400 transition-colors">Portofolio</a>
+        <a href="#contact" class="hover:text-indigo-400 transition-colors">Kontak</a>
+      </nav>
+
+      <!-- Action Buttons -->
+      <div class="hidden md:flex items-center gap-3">
+        <!-- Settings Quick Trigger -->
+        <button id="btn-trigger-settings" onclick="document.getElementById('btn-open-api-settings')?.click()" title="Konfigurasi URL Google Apps Script" class="p-2.5 rounded-xl glass-card text-slate-400 hover:text-white hover:border-slate-600 transition-all">
+          <i data-lucide="settings" class="w-4 h-4"></i>
+        </button>
+
+        <!-- Admin Dashboard Link -->
+        <a id="nav-admin-link" href="Admin.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-200 glass-card hover:bg-slate-800/80 hover:text-white transition-all border border-slate-700/60 shadow-sm">
+          <i data-lucide="shield-check" class="w-4 h-4 text-indigo-400"></i>
+          <span>Admin Panel</span>
+        </a>
+
+        <!-- Hire Me CTA -->
+        <a href="#contact" class="inline-flex items-center gap-2 px-5 py-2 rounded-xl text-xs sm:text-sm font-semibold text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 transition-all shadow-lg shadow-indigo-600/25 hover:shadow-indigo-600/40">
+          <span>Kontak Saya</span>
+          <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+        </a>
+      </div>
+
+      <!-- Mobile Menu Button -->
+      <button id="mobile-menu-btn" class="md:hidden p-2 rounded-xl text-slate-400 hover:text-white glass-card">
+        <i data-lucide="menu" class="w-6 h-6"></i>
+      </button>
+    </div>
+
+    <!-- Mobile Dropdown Menu -->
+    <div id="mobile-menu" class="hidden md:hidden glass-nav border-t border-slate-800 px-6 py-5 space-y-4">
+      <a href="#home" class="block text-slate-300 hover:text-indigo-400 py-1">Beranda</a>
+      <a href="#about" class="block text-slate-300 hover:text-indigo-400 py-1">Tentang</a>
+      <a href="#projects" class="block text-slate-300 hover:text-indigo-400 py-1">Portofolio</a>
+      <a href="#contact" class="block text-slate-300 hover:text-indigo-400 py-1">Kontak</a>
+      <div class="pt-4 border-t border-slate-800 flex flex-col gap-2.5">
+        <a href="Admin.html" class="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl text-sm font-medium text-slate-200 glass-card">
+          <i data-lucide="shield-check" class="w-4 h-4 text-indigo-400"></i> Admin Dashboard
+        </a>
+        <a href="#contact" class="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl text-sm font-semibold text-white bg-indigo-600">
+          Hubungi Saya
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- ====================================================================
+         HERO SECTION
+         ==================================================================== -->
+    <section id="home" class="relative pt-16 pb-24 md:pt-28 md:pb-36">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+          
+          <!-- Left Column: Copywriting & CTA -->
+          <div class="lg:col-span-7 space-y-7 text-center lg:text-left">
+            <!-- Availability Badge -->
+            <div class="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 backdrop-blur-md">
+              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+              <span>Tersedia untuk Proyek Baru & Kolaborasi</span>
+            </div>
+
+            <!-- Headline -->
+            <div class="space-y-3">
+              <p class="text-sm sm:text-base font-semibold tracking-wider text-indigo-400 uppercase">
+                Selamat Datang di Portofolio Saya
+              </p>
+              <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white tracking-tight leading-[1.15]">
+                Halo, Saya <span id="hero-name" class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-cyan-400">Ahmad Rizky Pratama</span>
+              </h1>
+              <h2 id="hero-role" class="text-xl sm:text-2xl font-bold text-slate-300">
+                Full Stack Developer & Cloud Architect
+              </h2>
+            </div>
+
+            <!-- Bio -->
+            <p id="hero-bio" class="text-base sm:text-lg text-slate-400 leading-relaxed max-w-2xl mx-auto lg:mx-0">
+              Software engineer berdedikasi dengan fokus pada pengembangan ekosistem web modern, cloud architecture, dan UI/UX interaktif. Senang memecahkan masalah kompleks dan merancang solusi digital yang berdampak nyata.
+            </p>
+
+            <!-- Buttons -->
+            <div class="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2">
+              <a href="#projects" class="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-xl font-semibold text-white bg-indigo-600 hover:bg-indigo-500 transition-all shadow-xl shadow-indigo-600/30 hover:scale-[1.02]">
+                <i data-lucide="briefcase" class="w-5 h-5"></i>
+                <span>Lihat Karya Portofolio</span>
+              </a>
+              <a href="#contact" class="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-xl font-semibold text-slate-200 glass-card hover:bg-slate-800/80 hover:text-white transition-all border border-slate-700 hover:scale-[1.02]">
+                <i data-lucide="mail" class="w-5 h-5 text-indigo-400"></i>
+                <span>Hubungi Saya</span>
+              </a>
+            </div>
+
+            <!-- Social Media Icons -->
+            <div class="pt-4 flex items-center justify-center lg:justify-start gap-3">
+              <span class="text-xs font-medium text-slate-400 mr-2">Temukan Saya di:</span>
+              <a id="link-github-hero" href="https://github.com" target="_blank" rel="noopener noreferrer" class="p-2.5 rounded-xl glass-card text-slate-400 hover:text-white hover:border-slate-500 transition-all">
+                <i data-lucide="github" class="w-5 h-5"></i>
+              </a>
+              <a id="link-linkedin-hero" href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="p-2.5 rounded-xl glass-card text-slate-400 hover:text-cyan-400 hover:border-cyan-500/50 transition-all">
+                <i data-lucide="linkedin" class="w-5 h-5"></i>
+              </a>
+              <a id="link-instagram-hero" href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="p-2.5 rounded-xl glass-card text-slate-400 hover:text-pink-400 hover:border-pink-500/50 transition-all">
+                <i data-lucide="instagram" class="w-5 h-5"></i>
+              </a>
+            </div>
+          </div>
+
+          <!-- Right Column: Visual Card -->
+          <div class="lg:col-span-5 flex justify-center">
+            <div class="relative w-full max-w-md">
+              <!-- Glow backdrop -->
+              <div class="absolute -inset-1.5 bg-gradient-to-r from-indigo-500 via-purple-500 to-cyan-500 rounded-3xl blur-xl opacity-30 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div>
+              
+              <!-- Card Container -->
+              <div class="relative glass-card rounded-3xl p-8 border border-white/10 shadow-2xl">
+                <!-- Avatar & Status -->
+                <div class="flex items-center gap-5 pb-6 border-b border-slate-800">
+                  <div class="relative">
+                    <img 
+                      src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=400&auto=format&fit=crop" 
+                      alt="Profile Avatar" 
+                      class="w-20 h-20 rounded-2xl object-cover ring-2 ring-indigo-500/50 shadow-md"
+                    />
+                    <span class="absolute -bottom-1 -right-1 w-5 h-5 bg-emerald-500 border-2 border-dark-950 rounded-full"></span>
+                  </div>
+                  <div>
+                    <h3 class="font-bold text-lg text-white">Ahmad Rizky Pratama</h3>
+                    <p class="text-xs text-indigo-400 font-medium">Software Engineer</p>
+                    <p class="text-xs text-slate-400 flex items-center gap-1 mt-1">
+                      <i data-lucide="map-pin" class="w-3.5 h-3.5 text-slate-500"></i> Jakarta, Indonesia
+                    </p>
+                  </div>
+                </div>
+
+                <!-- Code Terminal Simulation -->
+                <div class="mt-6 bg-dark-950/90 rounded-2xl p-4 border border-slate-800 font-mono text-xs text-slate-300 space-y-2">
+                  <div class="flex items-center gap-1.5 pb-2 border-b border-slate-800/80">
+                    <span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
+                    <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+                    <span class="ml-2 text-[10px] text-slate-500">developer.config.ts</span>
+                  </div>
+                  <p class="text-purple-400">const <span class="text-indigo-300">stack</span> = {</p>
+                  <p class="pl-4 text-slate-400">frontend: [<span class="text-emerald-400">'Next.js'</span>, <span class="text-emerald-400">'Tailwind'</span>],</p>
+                  <p class="pl-4 text-slate-400">backend: [<span class="text-emerald-400">'Node.js'</span>, <span class="text-emerald-400">'FastAPI'</span>],</p>
+                  <p class="pl-4 text-slate-400">cloud: [<span class="text-emerald-400">'GCP'</span>, <span class="text-emerald-400">'Docker'</span>],</p>
+                  <p class="pl-4 text-slate-400">status: <span class="text-amber-300">'Ready for innovation'</span></p>
+                  <p class="text-purple-400">};</p>
+                </div>
+
+                <!-- Floating Badges -->
+                <div class="grid grid-cols-2 gap-3 mt-6">
+                  <div class="p-3 rounded-xl bg-slate-900/60 border border-slate-800 flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-lg bg-indigo-500/10 flex items-center justify-center text-indigo-400">
+                      <i data-lucide="layers" class="w-4 h-4"></i>
+                    </div>
+                    <div>
+                      <div class="text-xs text-slate-400">Spesialisasi</div>
+                      <div class="text-xs font-bold text-white">Full Stack</div>
+                    </div>
+                  </div>
+                  <div class="p-3 rounded-xl bg-slate-900/60 border border-slate-800 flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-400">
+                      <i data-lucide="database" class="w-4 h-4"></i>
+                    </div>
+                    <div>
+                      <div class="text-xs text-slate-400">Backend API</div>
+                      <div class="text-xs font-bold text-white">Google Sheets</div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         ABOUT SECTION & TECH STACK
+         ==================================================================== -->
+    <section id="about" class="py-24 border-t border-slate-800/80 relative">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="text-center max-w-3xl mx-auto mb-16">
+          <span class="px-3.5 py-1.5 rounded-full text-xs font-semibold bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+            TENTANG SAYA
+          </span>
+          <h2 class="text-3xl sm:text-4xl font-extrabold text-white mt-4 tracking-tight">
+            Membangun Solusi Digital dengan Kualitas Terbaik
+          </h2>
+          <p id="about-bio" class="mt-4 text-slate-400 text-base leading-relaxed">
+            Software engineer dengan ketertarikan tinggi pada performa, skalabilitas, dan arsitektur kode bersih. Saya memadukan desain UI yang intuitif dengan sistem backend yang tangguh.
+          </p>
+        </div>
+
+        <!-- Metrics Grid -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 mb-16">
+          <div class="glass-card rounded-2xl p-6 text-center border border-white/5">
+            <div class="text-3xl sm:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">4+</div>
+            <div class="text-xs sm:text-sm font-medium text-slate-400 mt-2">Tahun Pengalaman</div>
+          </div>
+          <div class="glass-card rounded-2xl p-6 text-center border border-white/5">
+            <div class="text-3xl sm:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">25+</div>
+            <div class="text-xs sm:text-sm font-medium text-slate-400 mt-2">Proyek Selesai</div>
+          </div>
+          <div class="glass-card rounded-2xl p-6 text-center border border-white/5">
+            <div class="text-3xl sm:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-emerald-400">99%</div>
+            <div class="text-xs sm:text-sm font-medium text-slate-400 mt-2">Kepuasan Klien</div>
+          </div>
+          <div class="glass-card rounded-2xl p-6 text-center border border-white/5">
+            <div class="text-3xl sm:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-400">500+</div>
+            <div class="text-xs sm:text-sm font-medium text-slate-400 mt-2">Git Commits</div>
+          </div>
+        </div>
+
+        <!-- Skills & Tech Stack Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          
+          <!-- Category 1: Frontend -->
+          <div class="glass-card rounded-2xl p-7 border border-white/5 hover:border-indigo-500/40 transition-colors">
+            <div class="w-12 h-12 rounded-xl bg-indigo-500/10 flex items-center justify-center text-indigo-400 mb-5">
+              <i data-lucide="layout" class="w-6 h-6"></i>
+            </div>
+            <h3 class="text-lg font-bold text-white mb-2">Frontend Engineering</h3>
+            <p class="text-slate-400 text-sm mb-5 leading-relaxed">
+              Membangun antarmuka responsif yang cepat, aksesibel, dan memikat pengguna.
+            </p>
+            <div class="flex flex-wrap gap-2">
+              <span class="px-2.5 py-1 text-xs rounded-lg bg-slate-800 text-slate-300 font-medium">React / Next.js</span>
+              <span class="px-2.5 py-1 text-xs rounded-lg bg-slate-800 text-slate-300 font-medium">Tailwind CSS</span>
+              <span class="px-2.5 py-1 text-xs rounded-lg bg-slate-800 text-slate-300 font-medium">TypeScript</span>
+              <span class="px-2.5 py-1 text-xs rounded-lg bg-slate-800 text-slate-300 font-medium">HTML5 & Vanilla JS</span>
+              <span class="px-2.5 py-1 text-xs rounded-lg bg-slate-800 text-slate-300 font-medium">Redux / Zustand</span>
+            </div>
+          </div>
+
+          <!-- Category 2: Backend & Database -->
+          <div class="glass-card rounded-2xl p-7 border border-white/5 hover:border-purple-500/40 transition-colors">
+            <div class="w-12 h-12 rounded-xl bg-purple-500/10 flex items-center justify-center text-purple-400 mb-5">
+              <i data-lucide="server" class="w-6 h-6"></i>
+            </div>
+            <h3 class="text-lg font-bold text-white mb-2">Backend & Architecture</h3>
+            <p class="text-slate-400 text-sm mb-5 leading-relaxed">
+              Arsitektur REST API, serverless functions, database relasional dan NoSQL.
+            </p>
+            <div class="flex flex-wrap gap-2">
+              <span class="px-2.5 py-1 text-xs rounded-lg bg-slate-800 text-slate-300 font-medium">Node.js / Express</span>
+              <span class="px-2.5 py-1 text-xs rounded-lg bg-slate-800 text-slate-300 font-medium">Python FastAPI</span>
+              <span class="px-2.5 py-1 text-xs rounded-lg bg-slate-800 text-slate-300 font-medium">Google Apps Script</span>
+              <span class="px-2.5 py-1 text-xs rounded-lg bg-slate-800 text-slate-300 font-medium">PostgreSQL & Redis</span>
+              <span class="px-2.5 py-1 text-xs rounded-lg bg-slate-800 text-slate-300 font-medium">REST & GraphQL</span>
+            </div>
+          </div>
+
+          <!-- Category 3: Cloud & Tools -->
+          <div class="glass-card rounded-2xl p-7 border border-white/5 hover:border-cyan-500/40 transition-colors">
+            <div class="w-12 h-12 rounded-xl bg-cyan-500/10 flex items-center justify-center text-cyan-400 mb-5">
+              <i data-lucide="cloud-lightning" class="w-6 h-6"></i>
+            </div>
+            <h3 class="text-lg font-bold text-white mb-2">Cloud & DevOps</h3>
+            <p class="text-slate-400 text-sm mb-5 leading-relaxed">
+              Deployment pipeline, automated testing, containerization, dan cloud hosting.
+            </p>
+            <div class="flex flex-wrap gap-2">
+              <span class="px-2.5 py-1 text-xs rounded-lg bg-slate-800 text-slate-300 font-medium">Docker</span>
+              <span class="px-2.5 py-1 text-xs rounded-lg bg-slate-800 text-slate-300 font-medium">Google Cloud (GCP)</span>
+              <span class="px-2.5 py-1 text-xs rounded-lg bg-slate-800 text-slate-300 font-medium">Vercel / Netlify</span>
+              <span class="px-2.5 py-1 text-xs rounded-lg bg-slate-800 text-slate-300 font-medium">Git & GitHub Actions</span>
+              <span class="px-2.5 py-1 text-xs rounded-lg bg-slate-800 text-slate-300 font-medium">Figma</span>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         PROJECTS SECTION (DYNAMIC FETCH & FILTER)
+         ==================================================================== -->
+    <section id="projects" class="py-24 border-t border-slate-800/80 relative">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <!-- Header -->
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+          <div>
+            <span class="px-3.5 py-1.5 rounded-full text-xs font-semibold bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+              PORTOFOLIO PILIHAN
+            </span>
+            <h2 class="text-3xl sm:text-4xl font-extrabold text-white mt-4 tracking-tight">
+              Karya & Proyek Terkini
+            </h2>
+            <p class="mt-2 text-slate-400 text-sm sm:text-base">
+              Data portofolio ini diambil langsung secara dinamis dari database Google Sheets.
+            </p>
+          </div>
+
+          <!-- Category Filters Container -->
+          <div id="project-filter-buttons" class="flex flex-wrap items-center gap-2">
+            <!-- Filter buttons injected dynamically via main.js -->
+          </div>
+        </div>
+
+        <!-- Projects Grid Container -->
+        <div id="projects-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <!-- Cards injected dynamically via main.js -->
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         CONTACT SECTION
+         ==================================================================== -->
+    <section id="contact" class="py-24 border-t border-slate-800/80 relative">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+          
+          <!-- Contact Info Column -->
+          <div class="lg:col-span-5 space-y-8">
+            <div>
+              <span class="px-3.5 py-1.5 rounded-full text-xs font-semibold bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+                HUBUNGI SAYA
+              </span>
+              <h2 class="text-3xl sm:text-4xl font-extrabold text-white mt-4 tracking-tight">
+                Mari Diskusikan Proyek Impian Anda
+              </h2>
+              <p class="mt-4 text-slate-400 text-sm sm:text-base leading-relaxed">
+                Punya pertanyaan, ide kolaborasi, atau ingin konsultasi seputar pengembangan web dan arsitektur cloud? Kirimkan pesan sekarang!
+              </p>
+            </div>
+
+            <!-- Contact Details Cards -->
+            <div class="space-y-4">
+              <!-- Email Card -->
+              <a id="contact-email-link" href="mailto:ahmad.rizky@example.com" class="glass-card rounded-2xl p-4 flex items-center gap-4 hover:border-indigo-500/40 transition-colors group">
+                <div class="w-12 h-12 rounded-xl bg-indigo-500/10 flex items-center justify-center text-indigo-400 group-hover:scale-110 transition-transform">
+                  <i data-lucide="mail" class="w-5 h-5"></i>
+                </div>
+                <div>
+                  <div class="text-xs text-slate-400">Kirim Email</div>
+                  <div id="contact-email-text" class="text-sm font-semibold text-white">ahmad.rizky@example.com</div>
+                </div>
+              </a>
+
+              <!-- Phone Card -->
+              <a id="contact-phone-link" href="tel:+6281234567890" class="glass-card rounded-2xl p-4 flex items-center gap-4 hover:border-emerald-500/40 transition-colors group">
+                <div class="w-12 h-12 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-400 group-hover:scale-110 transition-transform">
+                  <i data-lucide="phone" class="w-5 h-5"></i>
+                </div>
+                <div>
+                  <div class="text-xs text-slate-400">Telepon / WhatsApp</div>
+                  <div id="contact-phone-text" class="text-sm font-semibold text-white">+62 812-3456-7890</div>
+                </div>
+              </a>
+
+              <!-- Location Card -->
+              <div class="glass-card rounded-2xl p-4 flex items-center gap-4 border border-white/5">
+                <div class="w-12 h-12 rounded-xl bg-cyan-500/10 flex items-center justify-center text-cyan-400">
+                  <i data-lucide="map-pin" class="w-5 h-5"></i>
+                </div>
+                <div>
+                  <div class="text-xs text-slate-400">Lokasi Kerja</div>
+                  <div class="text-sm font-semibold text-white">Jakarta, Indonesia (Available Remote Worldwide)</div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Contact Form Column -->
+          <div class="lg:col-span-7">
+            <div class="glass-card rounded-3xl p-8 sm:p-10 border border-white/10 shadow-2xl relative">
+              <h3 class="text-xl sm:text-2xl font-bold text-white mb-2">Formulir Pesan Pengunjung</h3>
+              <p class="text-xs sm:text-sm text-slate-400 mb-8">Pesan Anda akan otomatis tersimpan di tab "Messages" database Google Sheets saya.</p>
+
+              <form id="contact-form" class="space-y-5">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                  <!-- Name Input -->
+                  <div>
+                    <label for="contact-name" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Nama Lengkap *</label>
+                    <input 
+                      type="text" 
+                      id="contact-name" 
+                      required 
+                      placeholder="e.g. Budi Santoso"
+                      class="w-full px-4 py-3 rounded-xl bg-slate-900/80 border border-slate-700/80 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"
+                    />
+                  </div>
+
+                  <!-- Email Input -->
+                  <div>
+                    <label for="contact-email" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Alamat Email *</label>
+                    <input 
+                      type="email" 
+                      id="contact-email" 
+                      required 
+                      placeholder="budi@example.com"
+                      class="w-full px-4 py-3 rounded-xl bg-slate-900/80 border border-slate-700/80 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"
+                    />
+                  </div>
+                </div>
+
+                <!-- Subject Input -->
+                <div>
+                  <label for="contact-subject" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Subjek / Keperluan</label>
+                  <input 
+                    type="text" 
+                    id="contact-subject" 
+                    placeholder="e.g. Diskusi Proyek Web E-Commerce"
+                    class="w-full px-4 py-3 rounded-xl bg-slate-900/80 border border-slate-700/80 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"
+                  />
+                </div>
+
+                <!-- Message Input -->
+                <div>
+                  <label for="contact-message" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Pesan Anda *</label>
+                  <textarea 
+                    id="contact-message" 
+                    rows="5" 
+                    required 
+                    placeholder="Ceritakan gambaran proyek atau pertanyaan Anda di sini..."
+                    class="w-full px-4 py-3 rounded-xl bg-slate-900/80 border border-slate-700/80 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all resize-y"
+                  ></textarea>
+                </div>
+
+                <!-- Submit Button -->
+                <button 
+                  type="submit" 
+                  id="contact-submit-btn" 
+                  class="w-full py-4 rounded-xl font-bold text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 transition-all shadow-xl shadow-indigo-600/30 flex items-center justify-center gap-2 hover:scale-[1.01] active:scale-[0.99]"
+                >
+                  <i data-lucide="send" class="w-4 h-4"></i>
+                  <span>Kirim Pesan Sekarang</span>
+                </button>
+              </form>
+
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <!-- ====================================================================
+       FOOTER
+       ==================================================================== -->
+  <footer class="border-t border-slate-800/80 bg-dark-950 py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center text-white font-bold text-sm">
+          AR
+        </div>
+        <span class="text-sm text-slate-400">
+          &copy; <span id="footer-year">2026</span> <strong id="footer-name" class="text-slate-200">Ahmad Rizky Pratama</strong>. Seluruh hak cipta dilindungi.
+        </span>
+      </div>
+
+      <!-- Social Links -->
+      <div class="flex items-center gap-4 text-slate-400">
+        <a id="link-github-footer" href="https://github.com" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors" title="GitHub">
+          <i data-lucide="github" class="w-5 h-5"></i>
+        </a>
+        <a id="link-linkedin-footer" href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="hover:text-cyan-400 transition-colors" title="LinkedIn">
+          <i data-lucide="linkedin" class="w-5 h-5"></i>
+        </a>
+        <a id="link-instagram-footer" href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="hover:text-pink-400 transition-colors" title="Instagram">
+          <i data-lucide="instagram" class="w-5 h-5"></i>
+        </a>
+        <a href="#home" class="ml-4 p-2 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-300 transition-colors" title="Kembali ke Atas">
+          <i data-lucide="arrow-up" class="w-4 h-4"></i>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ====================================================================
+       MODAL: DETAIL PROYEK
+       ==================================================================== -->
+  <div id="project-detail-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md overflow-y-auto">
+    <div class="relative w-full max-w-3xl glass-card rounded-2xl border border-slate-700/80 overflow-hidden my-8 shadow-2xl animate-fade-in">
+      <div id="project-modal-content">
+        <!-- Content injected dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ====================================================================
+       MODAL: SETTING URL GOOGLE APPS SCRIPT
+       ==================================================================== -->
+  <div id="api-settings-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
+    <div class="relative w-full max-w-lg glass-card rounded-2xl p-6 sm:p-8 border border-indigo-500/30 shadow-2xl space-y-6">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-indigo-500/10 flex items-center justify-center text-indigo-400">
+            <i data-lucide="link" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="font-bold text-lg text-white">Hubungkan Google Apps Script</h3>
+            <p class="text-xs text-slate-400">Backend API & Database Google Sheets</p>
+          </div>
+        </div>
+        <button id="btn-close-api-settings" class="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="space-y-4">
+        <div>
+          <label for="input-api-url" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Web App Deployment URL</label>
+          <input 
+            type="url" 
+            id="input-api-url" 
+            placeholder="https://script.google.com/macros/s/AKfycb.../exec"
+            class="w-full px-4 py-3 rounded-xl bg-slate-900/90 border border-slate-700 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 font-mono text-xs"
+          />
+          <p class="text-[11px] text-slate-400 mt-2">
+            Salin URL dari menu <strong>Deploy &gt; Manage Deployments &gt; Web app URL</strong> di Google Apps Script Anda. Pastikan akses disetel ke <em>"Anyone"</em>.
+          </p>
+        </div>
+
+        <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 text-xs text-slate-300 space-y-2">
+          <div class="font-semibold text-indigo-400 flex items-center gap-1.5">
+            <i data-lucide="shield-alert" class="w-4 h-4"></i> Tips Penggunaan:
+          </div>
+          <p>Jika input dikosongkan, website akan secara otomatis memakai data demo lokal untuk keperluan testing antarmuka.</p>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-end gap-3 pt-4 border-t border-slate-800">
+        <button onclick="document.getElementById('api-settings-modal').classList.add('hidden')" class="px-4 py-2.5 rounded-xl text-slate-300 hover:bg-slate-800 text-sm font-medium transition-colors">
+          Batal
+        </button>
+        <button id="btn-save-api-url" class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold transition-all shadow-lg shadow-indigo-600/30">
+          Simpan & Hubungkan
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none max-w-sm w-full px-4 sm:px-0"></div>
+
+  <!-- Scripts -->
+  <script src="js/api.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
