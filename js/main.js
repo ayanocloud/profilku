@@ -467,18 +467,39 @@ window.closeProjectModal = function() {
 };
 
 /**
- * Modal Pengaturan URL API Google Apps Script (Memudahkan konfigurasi tanpa edit file)
+ * Modal Pengaturan URL API Google Apps Script (Memudahkan konfigurasi & pengujian)
  */
 function setupApiUrlModal() {
   const modal = document.getElementById('api-settings-modal');
   const openBtn = document.getElementById('btn-open-api-settings');
   const closeBtn = document.getElementById('btn-close-api-settings');
   const saveBtn = document.getElementById('btn-save-api-url');
+  const testBtn = document.getElementById('btn-test-api-url');
+  const resetBtn = document.getElementById('btn-reset-demo-api');
   const input = document.getElementById('input-api-url');
+  const feedbackBox = document.getElementById('api-test-feedback');
+
+  function showFeedback(message, type = 'info') {
+    if (!feedbackBox) return;
+    feedbackBox.classList.remove('hidden', 'bg-emerald-950/60', 'border-emerald-500/40', 'text-emerald-300', 'bg-rose-950/60', 'border-rose-500/40', 'text-rose-300', 'bg-slate-900', 'border-slate-700', 'text-slate-300');
+    
+    if (type === 'success') {
+      feedbackBox.className = 'p-3.5 rounded-xl text-xs border bg-emerald-950/70 border-emerald-500/40 text-emerald-300 flex items-start gap-2';
+      feedbackBox.innerHTML = `<i data-lucide="check-circle" class="w-4 h-4 text-emerald-400 shrink-0 mt-0.5"></i> <div>${escapeHtml(message)}</div>`;
+    } else if (type === 'error') {
+      feedbackBox.className = 'p-3.5 rounded-xl text-xs border bg-rose-950/70 border-rose-500/40 text-rose-300 flex items-start gap-2';
+      feedbackBox.innerHTML = `<i data-lucide="alert-triangle" class="w-4 h-4 text-rose-400 shrink-0 mt-0.5"></i> <div>${escapeHtml(message)}</div>`;
+    } else {
+      feedbackBox.className = 'p-3.5 rounded-xl text-xs border bg-indigo-950/70 border-indigo-500/40 text-indigo-300 flex items-start gap-2';
+      feedbackBox.innerHTML = `<i data-lucide="loader" class="w-4 h-4 text-indigo-400 shrink-0 mt-0.5 animate-spin"></i> <div>${escapeHtml(message)}</div>`;
+    }
+    initLucideIcons();
+  }
 
   if (openBtn && modal) {
     openBtn.addEventListener('click', () => {
       if (input) input.value = getApiUrl();
+      if (feedbackBox) feedbackBox.classList.add('hidden');
       modal.classList.remove('hidden');
     });
   }
@@ -489,15 +510,84 @@ function setupApiUrlModal() {
     });
   }
 
+  // Reset ke Mode Demo
+  if (resetBtn && input) {
+    resetBtn.addEventListener('click', () => {
+      input.value = '';
+      setApiUrl('');
+      showFeedback('Mode demo lokal telah diaktifkan kembali.', 'info');
+      setTimeout(() => {
+        modal.classList.add('hidden');
+        showToast('Menggunakan mode demo lokal.', 'info');
+        loadPublicData();
+      }, 700);
+    });
+  }
+
+  // Tombol Uji Koneksi Langsung
+  if (testBtn && input) {
+    testBtn.addEventListener('click', async () => {
+      const rawUrl = input.value.trim();
+      if (!rawUrl) {
+        showFeedback('Ketik atau tempelkan URL Google Apps Script Anda terlebih dahulu.', 'error');
+        return;
+      }
+
+      const origText = testBtn.innerHTML;
+      testBtn.disabled = true;
+      testBtn.innerHTML = `<i data-lucide="loader" class="w-4 h-4 animate-spin"></i> Menguji...`;
+      initLucideIcons();
+      showFeedback('Sedang menguji koneksi ke Google Apps Script...', 'info');
+
+      try {
+        const testRes = await testGasConnection(rawUrl);
+        if (testRes.success) {
+          if (testRes.sanitizedUrl !== rawUrl) {
+            input.value = testRes.sanitizedUrl;
+          }
+          let msg = testRes.message;
+          if (testRes.notice) msg += ` (${testRes.notice})`;
+          showFeedback(msg, 'success');
+        } else {
+          showFeedback(testRes.error, 'error');
+        }
+      } catch (e) {
+        showFeedback('Uji koneksi gagal: ' + e.message, 'error');
+      } finally {
+        testBtn.disabled = false;
+        testBtn.innerHTML = origText;
+        initLucideIcons();
+      }
+    });
+  }
+
+  // Simpan & Hubungkan
   if (saveBtn && input && modal) {
-    saveBtn.addEventListener('click', () => {
-      const url = input.value.trim();
-      setApiUrl(url);
+    saveBtn.addEventListener('click', async () => {
+      const rawUrl = input.value.trim();
+      
+      if (!rawUrl) {
+        setApiUrl('');
+        modal.classList.add('hidden');
+        showToast('URL dikosongkan. Kembali ke mode demo lokal.', 'info');
+        loadPublicData();
+        return;
+      }
+
+      const validation = validateAndSanitizeGasUrl(rawUrl);
+      if (!validation.valid) {
+        showFeedback(validation.error, 'error');
+        return;
+      }
+
+      const finalUrl = setApiUrl(rawUrl);
+      input.value = finalUrl;
       modal.classList.add('hidden');
       showToast('URL Google Apps Script disimpan! Memuat ulang data...', 'success');
       setTimeout(() => {
         loadPublicData();
-      }, 500);
+      }, 400);
     });
   }
 }
+

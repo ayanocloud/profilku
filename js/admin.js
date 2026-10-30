@@ -690,18 +690,38 @@ function setInputValue(id, val) {
 }
 
 /**
- * Setup Modal Konfigurasi API di Admin
+ * Setup Modal Konfigurasi API di Admin (dengan uji koneksi & diagnosa)
  */
 function setupApiUrlModal() {
   const modal = document.getElementById('admin-api-modal');
   const openBtn = document.getElementById('admin-api-settings-btn');
   const closeBtn = document.getElementById('admin-close-api-modal');
   const saveBtn = document.getElementById('admin-save-api-url');
+  const testBtn = document.getElementById('admin-btn-test-api-url');
+  const resetBtn = document.getElementById('admin-reset-demo-api');
   const input = document.getElementById('admin-input-api-url');
+  const feedbackBox = document.getElementById('admin-api-test-feedback');
+
+  function showFeedback(message, type = 'info') {
+    if (!feedbackBox) return;
+    feedbackBox.classList.remove('hidden');
+    if (type === 'success') {
+      feedbackBox.className = 'p-3.5 rounded-xl text-xs border bg-emerald-950/70 border-emerald-500/40 text-emerald-300 flex items-start gap-2';
+      feedbackBox.innerHTML = `<i data-lucide="check-circle" class="w-4 h-4 text-emerald-400 shrink-0 mt-0.5"></i> <div>${escapeHtml(message)}</div>`;
+    } else if (type === 'error') {
+      feedbackBox.className = 'p-3.5 rounded-xl text-xs border bg-rose-950/70 border-rose-500/40 text-rose-300 flex items-start gap-2';
+      feedbackBox.innerHTML = `<i data-lucide="alert-triangle" class="w-4 h-4 text-rose-400 shrink-0 mt-0.5"></i> <div>${escapeHtml(message)}</div>`;
+    } else {
+      feedbackBox.className = 'p-3.5 rounded-xl text-xs border bg-indigo-950/70 border-indigo-500/40 text-indigo-300 flex items-start gap-2';
+      feedbackBox.innerHTML = `<i data-lucide="loader" class="w-4 h-4 text-indigo-400 shrink-0 mt-0.5 animate-spin"></i> <div>${escapeHtml(message)}</div>`;
+    }
+    initLucideIcons();
+  }
 
   if (openBtn && modal) {
     openBtn.addEventListener('click', () => {
       if (input) input.value = getApiUrl();
+      if (feedbackBox) feedbackBox.classList.add('hidden');
       modal.classList.remove('hidden');
     });
   }
@@ -712,10 +732,79 @@ function setupApiUrlModal() {
     });
   }
 
+  // Reset Demo Mode
+  if (resetBtn && input) {
+    resetBtn.addEventListener('click', () => {
+      input.value = '';
+      setApiUrl('');
+      showFeedback('Mode demo lokal telah diaktifkan kembali.', 'info');
+      setTimeout(async () => {
+        modal.classList.add('hidden');
+        showToast('Menggunakan mode demo lokal.', 'info');
+        if (adminState.isLoggedIn) {
+          await fetchAdminDashboardData();
+        }
+      }, 700);
+    });
+  }
+
+  // Uji Koneksi Langsung
+  if (testBtn && input) {
+    testBtn.addEventListener('click', async () => {
+      const rawUrl = input.value.trim();
+      if (!rawUrl) {
+        showFeedback('Masukkan URL Google Apps Script Anda terlebih dahulu.', 'error');
+        return;
+      }
+
+      const origText = testBtn.innerHTML;
+      testBtn.disabled = true;
+      testBtn.innerHTML = `<i data-lucide="loader" class="w-4 h-4 animate-spin"></i> Menguji...`;
+      initLucideIcons();
+      showFeedback('Menguji koneksi ke Google Apps Script...', 'info');
+
+      try {
+        const testRes = await testGasConnection(rawUrl);
+        if (testRes.success) {
+          if (testRes.sanitizedUrl !== rawUrl) {
+            input.value = testRes.sanitizedUrl;
+          }
+          let msg = testRes.message;
+          if (testRes.notice) msg += ` (${testRes.notice})`;
+          showFeedback(msg, 'success');
+        } else {
+          showFeedback(testRes.error, 'error');
+        }
+      } catch (e) {
+        showFeedback('Uji koneksi gagal: ' + e.message, 'error');
+      } finally {
+        testBtn.disabled = false;
+        testBtn.innerHTML = origText;
+        initLucideIcons();
+      }
+    });
+  }
+
+  // Simpan URL
   if (saveBtn && input && modal) {
     saveBtn.addEventListener('click', async () => {
-      const url = input.value.trim();
-      setApiUrl(url);
+      const rawUrl = input.value.trim();
+      if (!rawUrl) {
+        setApiUrl('');
+        modal.classList.add('hidden');
+        showToast('URL dikosongkan. Kembali ke mode demo.', 'info');
+        if (adminState.isLoggedIn) await fetchAdminDashboardData();
+        return;
+      }
+
+      const val = validateAndSanitizeGasUrl(rawUrl);
+      if (!val.valid) {
+        showFeedback(val.error, 'error');
+        return;
+      }
+
+      const finalUrl = setApiUrl(rawUrl);
+      input.value = finalUrl;
       modal.classList.add('hidden');
       showToast('URL Google Apps Script disimpan! Menghubungkan ulang...', 'success');
       if (adminState.isLoggedIn) {

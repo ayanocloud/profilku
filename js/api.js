@@ -3,13 +3,62 @@
  * API & UTILITY HELPER (api.js)
  * ====================================================================
  * Mengelola komunikasi HTTP Fetch ke Google Apps Script Web App,
- * penanganan fallback demo data jika belum deploy, dan sistem notifikasi toast.
+ * validasi URL, auto-diagnosa koneksi, penanganan CORS, dan notifikasi toast.
  * ====================================================================
  */
 
 // Ganti URL ini dengan URL Web App Google Apps Script Anda setelah di-Deploy!
 // Format: https://script.google.com/macros/s/AKfycbx.../exec
 const DEFAULT_GAS_API_URL = "";
+
+/**
+ * Validasi dan pembersihan URL Google Apps Script
+ */
+function validateAndSanitizeGasUrl(rawUrl) {
+  if (!rawUrl || typeof rawUrl !== 'string') {
+    return { valid: false, error: 'URL tidak boleh kosong.' };
+  }
+
+  let url = rawUrl.trim().replace(/^["']|["']$/g, '');
+
+  // 1. Cek jika pengguna memasukkan URL Spreadsheet bukan Apps Script Web App
+  if (url.includes('docs.google.com/spreadsheets')) {
+    return {
+      valid: false,
+      error: 'URL yang Anda masukkan adalah URL Google Sheets, bukan Web App URL! Buka menu Extensions > Apps Script > Deploy > New Deployment > Web app untuk menyalin URL API.'
+    };
+  }
+
+  // 2. Cek jika pengguna memasukkan URL Editor script
+  if (url.includes('script.google.com') && url.includes('/edit')) {
+    return {
+      valid: false,
+      error: 'URL yang Anda masukkan adalah URL Editor Apps Script! Klik Deploy > Manage Deployments untuk mendapatkan Web App URL (.../exec).'
+    };
+  }
+
+  // 3. Deteksi jika menggunakan URL /dev (yang memblokir akses publik karena butuh login Google)
+  let notice = null;
+  if (url.endsWith('/dev')) {
+    url = url.substring(0, url.length - 4) + '/exec';
+    notice = 'URL berakhiran /dev otomatis diubah menjadi /exec karena versi /dev mewajibkan login Google.';
+  }
+
+  // 4. Pastikan diawali https://
+  if (!url.startsWith('http://') && !url.startsWith('https://')) {
+    url = 'https://' + url;
+  }
+
+  // 5. Validasi domain script.google.com
+  if (!url.includes('script.google.com/macros/s/')) {
+    return {
+      valid: false,
+      error: 'Format URL tidak valid! URL Web App Google Apps Script harus berformat: https://script.google.com/macros/s/.../exec'
+    };
+  }
+
+  return { valid: true, sanitizedUrl: url, notice: notice };
+}
 
 // Ambil URL tersimpan di localStorage atau gunakan default
 function getApiUrl() {
@@ -20,18 +69,21 @@ function getApiUrl() {
   return DEFAULT_GAS_API_URL.trim();
 }
 
-// Simpan custom URL (berguna saat setting API URL dari modal/pengaturan)
-function setApiUrl(url) {
-  if (url && url.trim() !== "") {
-    localStorage.setItem('gas_api_url', url.trim());
+// Simpan custom URL dengan sanitasi otomatis
+function setApiUrl(rawUrl) {
+  if (rawUrl && rawUrl.trim() !== "") {
+    const res = validateAndSanitizeGasUrl(rawUrl);
+    const finalUrl = res.valid ? res.sanitizedUrl : rawUrl.trim();
+    localStorage.setItem('gas_api_url', finalUrl);
+    return finalUrl;
   } else {
     localStorage.removeItem('gas_api_url');
+    return "";
   }
 }
 
 /**
- * Data Cadangan (Mock Data) untuk preview instan ketika Google Apps Script
- * belum di-deploy atau sedang dijalankan di lingkungan lokal tanpa internet.
+ * Data Cadangan (Mock Data) untuk preview instan
  */
 const MOCK_PUBLIC_DATA = {
   profile: {
@@ -89,31 +141,102 @@ const MOCK_PUBLIC_DATA = {
 };
 
 /**
+ * Uji Koneksi Langsung (Diagnosa Mandiri)
+ * Memeriksa apakah Web App URL dapat diakses secara publik dan mengembalikan respon valid
+ */
+async function testGasConnection(rawUrl) {
+  const check = validateAndSanitizeGasUrl(rawUrl);
+  if (!check.valid) {
+    return { success: false, error: check.error };
+  }
+
+  const targetUrl = check.sanitizedUrl;
+
+  try {
+    // 1. Coba GET ping request
+    const getUrl = new URL(targetUrl);
+    getUrl.searchParams.set('action', 'ping');
+
+    let response = await fetch(getUrl.toString(), {
+      method: 'GET',
+      mode: 'cors',
+      redirect: 'follow',
+      headers: { 'Accept': 'application/json' }
+    });
+
+    let text = await response.text();
+    let data;
+
+    // Cek jika Google mengembalikan HTML halaman login (Akibat setelan 'Only myself')
+    if (text.includes('<!DOCTYPE html') || text.includes('accounts.google.com') || text.includes('ServiceLogin')) {
+      return {
+        success: false,
+        error: 'Web App mewajibkan Login Google! Silakan buka Apps Script > Deploy > Manage Deployments, ubah opsi "Who has access" menjadi "Anyone" (Siapa saja).'
+      };
+    }
+
+    try {
+      data = JSON.parse(text);
+    } catch (e) {
+      // Jika GET gagal parse JSON, coba POST ping
+      const postRes = await fetch(targetUrl, {
+        method: 'POST',
+        mode: 'cors',
+        redirect: 'follow',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({ action: 'ping' })
+      });
+      const postText = await postRes.text();
+      data = JSON.parse(postText);
+    }
+
+    if (data && data.status === 'success') {
+      return {
+        success: true,
+        message: 'Koneksi ke Google Apps Script Berhasil!',
+        sanitizedUrl: targetUrl,
+        notice: check.notice
+      };
+    } else {
+      return {
+        success: false,
+        error: data.message || 'Respon dari server tidak sesuai skema.'
+      };
+    }
+  } catch (err) {
+    console.error('Koneksi test error:', err);
+    return {
+      success: false,
+      error: 'Gagal terhubung (CORS / Network Error). Pastikan saat Deploy di Apps Script: Execute as: "Me" dan Who has access: "Anyone".'
+    };
+  }
+}
+
+/**
  * Fungsi utilitas terpusat apiCall
  * @param {string} action Nama aksi (e.g. 'getPublicData', 'login', 'sendMessage', dll)
  * @param {object} payload Data parameter yang dikirim
  * @param {string} method 'GET' atau 'POST'
  * @returns {Promise<any>}
  */
-async function apiCall(action, payload = {}, method = 'POST') {
-  const apiUrl = getApiUrl();
+async function apiCall(action, payload = {}, method = 'GET') {
+  const rawApiUrl = getApiUrl();
 
-  // Jika URL belum disetel dan mencoba getPublicData, kembalikan mock data
-  if (!apiUrl) {
-    console.warn("⚠️ [API Warning] URL Google Apps Script belum diset. Menggunakan mock data lokal.");
+  // Jika URL belum disetel, gunakan fallback mock data
+  if (!rawApiUrl) {
     if (action === 'getPublicData') {
-      await new Promise(r => setTimeout(r, 600)); // Simulasi network delay
+      await new Promise(r => setTimeout(r, 400));
       return { status: 'success', data: MOCK_PUBLIC_DATA, isMock: true };
     }
     if (action === 'login') {
-      await new Promise(r => setTimeout(r, 500));
+      await new Promise(r => setTimeout(r, 400));
       if (payload.passcode === 'admin123') {
-        return { status: 'success', message: 'Login demo berhasil (Passcode default: admin123)', authorized: true, isMock: true };
+        return { status: 'success', message: 'Login demo berhasil (Passcode: admin123)', authorized: true, isMock: true };
       }
       return { status: 'error', message: 'Passcode salah! Untuk demo gunakan: admin123', authorized: false, isMock: true };
     }
     if (action === 'getAdminData') {
-      await new Promise(r => setTimeout(r, 600));
+      await new Promise(r => setTimeout(r, 400));
       return {
         status: 'success',
         data: {
@@ -134,48 +257,67 @@ async function apiCall(action, payload = {}, method = 'POST') {
       };
     }
     if (action === 'sendMessage') {
-      await new Promise(r => setTimeout(r, 800));
+      await new Promise(r => setTimeout(r, 500));
       return { status: 'success', message: 'Pesan berhasil terkirim (Mode Demo Lokal)!', isMock: true };
     }
     if (action === 'addProject' || action === 'updateProject' || action === 'deleteProject' || action === 'updateProfile') {
-      await new Promise(r => setTimeout(r, 700));
+      await new Promise(r => setTimeout(r, 500));
       return { status: 'success', message: 'Operasi berhasil disimpan (Mode Demo Lokal)!', isMock: true };
     }
   }
 
+  // Bersihkan URL
+  const valResult = validateAndSanitizeGasUrl(rawApiUrl);
+  const apiUrl = valResult.valid ? valResult.sanitizedUrl : rawApiUrl;
+
   try {
     let response;
     
+    // Strategi Permintaan:
+    // Jika GET, kirim query parameter dan dukung redirect: 'follow'.
+    // Jika GET gagal karena CORS/redirect issue, otomatis fallback ke POST dengan text/plain!
     if (method.toUpperCase() === 'GET') {
-      const url = new URL(apiUrl);
-      url.searchParams.set('action', action);
-      for (const key in payload) {
-        if (payload[key] !== undefined && payload[key] !== null) {
-          url.searchParams.set(key, payload[key]);
+      try {
+        const url = new URL(apiUrl);
+        url.searchParams.set('action', action);
+        for (const key in payload) {
+          if (payload[key] !== undefined && payload[key] !== null) {
+            url.searchParams.set(key, payload[key]);
+          }
         }
-      }
 
-      response = await fetch(url.toString(), {
-        method: 'GET',
-        mode: 'cors'
-      });
+        response = await fetch(url.toString(), {
+          method: 'GET',
+          mode: 'cors',
+          redirect: 'follow',
+          headers: {
+            'Accept': 'application/json'
+          }
+        });
+      } catch (getErr) {
+        console.warn(`[API Info] GET ${action} mengalami kendala. Mencoba fallback ke POST...`);
+        // Fallback ke POST
+        response = await fetch(apiUrl, {
+          method: 'POST',
+          mode: 'cors',
+          redirect: 'follow',
+          headers: {
+            'Content-Type': 'text/plain;charset=utf-8'
+          },
+          body: JSON.stringify({ action: action, ...payload })
+        });
+      }
     } else {
       // POST request
-      // Penting: Google Apps Script Web App memblokir preflight OPTIONS jika menggunakan
-      // Content-Type: application/json. Menggunakan text/plain;charset=utf-8 mencegah
-      // preflight CORS dan dibaca via e.postData.contents di Apps Script.
-      const requestBody = JSON.stringify({
-        action: action,
-        ...payload
-      });
-
+      // Menggunakan text/plain;charset=utf-8 mencegah CORS preflight OPTIONS di Apps Script
       response = await fetch(apiUrl, {
         method: 'POST',
         mode: 'cors',
+        redirect: 'follow',
         headers: {
           'Content-Type': 'text/plain;charset=utf-8'
         },
-        body: requestBody
+        body: JSON.stringify({ action: action, ...payload })
       });
     }
 
@@ -183,7 +325,14 @@ async function apiCall(action, payload = {}, method = 'POST') {
       throw new Error(`HTTP Error: ${response.status} ${response.statusText}`);
     }
 
-    const result = await response.json();
+    const text = await response.text();
+
+    // Deteksi jika Google Apps Script melempar halaman HTML (misal redirect ke login Google)
+    if (text.includes('<!DOCTYPE html') || text.includes('accounts.google.com') || text.includes('ServiceLogin')) {
+      throw new Error('Google Apps Script mewajibkan Login. Pastikan opsi "Who has access" disetel ke "Anyone" pada deployment Web App Anda.');
+    }
+
+    const result = JSON.parse(text);
     return result;
   } catch (error) {
     console.error(`[API Error] Request '${action}' gagal:`, error);
@@ -195,9 +344,8 @@ async function apiCall(action, payload = {}, method = 'POST') {
  * ====================================================================
  * TOAST NOTIFICATION SYSTEM
  * ====================================================================
- * Menampilkan pesan feedback modern melayang (toast) dengan Tailwind CSS
  */
-function showToast(message, type = 'info', duration = 4000) {
+function showToast(message, type = 'info', duration = 4500) {
   let container = document.getElementById('toast-container');
   if (!container) {
     container = document.createElement('div');
@@ -209,7 +357,6 @@ function showToast(message, type = 'info', duration = 4000) {
   const toast = document.createElement('div');
   toast.className = 'pointer-events-auto transform transition-all duration-300 translate-y-3 opacity-0 flex items-start gap-3 p-4 rounded-xl shadow-2xl border text-sm backdrop-blur-md';
 
-  // Warna dan Icon berdasarkan tipe
   let bgClass = '';
   let borderClass = '';
   let iconHtml = '';
@@ -243,13 +390,11 @@ function showToast(message, type = 'info', duration = 4000) {
 
   container.appendChild(toast);
 
-  // Animasi masuk
   requestAnimationFrame(() => {
     toast.classList.remove('translate-y-3', 'opacity-0');
     toast.classList.add('translate-y-0', 'opacity-100');
   });
 
-  // Hapus otomatis
   setTimeout(() => {
     toast.classList.remove('translate-y-0', 'opacity-100');
     toast.classList.add('translate-y-3', 'opacity-0');
@@ -257,7 +402,6 @@ function showToast(message, type = 'info', duration = 4000) {
   }, duration);
 }
 
-// Helper untuk mencegah XSS pada pesan
 function escapeHtml(text) {
   if (!text) return '';
   const div = document.createElement('div');

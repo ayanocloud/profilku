@@ -15,26 +15,63 @@ const SHEET_MESSAGES = 'Messages';
 
 /**
  * Mendapatkan referensi Spreadsheet aktif.
- * Pastikan script ini dibuat terhubung (container-bound) dengan Google Sheets,
- * atau ganti dengan SpreadsheetApp.openById("YOUR_SPREADSHEET_ID").
+ * Jika script terhubung (container-bound) ke Spreadsheet, SpreadsheetApp.getActiveSpreadsheet() akan langsung bekerja.
+ * Jika script standalone (dibuat terpisah di script.google.com), ganti SPREADSHEET_ID di bawah ini.
  */
 function getDb() {
   try {
-    return SpreadsheetApp.getActiveSpreadsheet();
-  } catch (err) {
-    // Jika script berdiri sendiri (standalone), masukkan Spreadsheet ID Anda di sini:
-    const SPREADSHEET_ID = "YOUR_SPREADSHEET_ID_HERE";
-    return SpreadsheetApp.openById(SPREADSHEET_ID);
+    const active = SpreadsheetApp.getActiveSpreadsheet();
+    if (active) return active;
+  } catch (err) {}
+
+  // Coba ambil dari script properties jika ada
+  try {
+    const propId = PropertiesService.getScriptProperties().getProperty('SPREADSHEET_ID');
+    if (propId) return SpreadsheetApp.openById(propId);
+  } catch (err) {}
+
+  // Ganti string ini jika script Anda dibuat di script.google.com (bukan dari Google Sheets)
+  const SPREADSHEET_ID = "YOUR_SPREADSHEET_ID_HERE";
+  if (SPREADSHEET_ID && SPREADSHEET_ID !== "YOUR_SPREADSHEET_ID_HERE") {
+    try {
+      return SpreadsheetApp.openById(SPREADSHEET_ID);
+    } catch (err) {}
   }
+
+  return null;
+}
+
+/**
+ * Memastikan database dan sheet tersedia.
+ * Jika sheet belum ada atau kosong, fungsi ini akan otomatis menginisialisasi
+ * database sehingga user tidak perlu khawatir lupa menjalankan setupDatabase().
+ */
+function ensureDatabase() {
+  const ss = getDb();
+  if (!ss) {
+    throw new Error('Spreadsheet tidak terhubung! Pastikan Apps Script ini dibuka melalui menu Extensions (Ekstensi) > Apps Script di dalam file Google Sheets Anda.');
+  }
+
+  let profileSheet = ss.getSheetByName(SHEET_PROFILE);
+  let projectsSheet = ss.getSheetByName(SHEET_PROJECTS);
+
+  // Jika salah satu sheet belum ada atau masih kosong, jalankan setup otomatis
+  if (!profileSheet || !projectsSheet || profileSheet.getLastRow() <= 1) {
+    setupDatabase();
+  }
+
+  return ss;
 }
 
 /**
  * FUNGSI SETUP OTOMATIS:
- * Jalankan fungsi ini sekali dari editor Google Apps Script (klik 'Run' -> 'setupDatabase')
- * untuk membuat seluruh struktur sheet & data awal (seed data) secara otomatis.
+ * Membuat seluruh struktur sheet & data awal (seed data) secara otomatis.
  */
 function setupDatabase() {
   const ss = getDb();
+  if (!ss) {
+    throw new Error('Gagal: Spreadsheet tidak ditemukan. Buka dari Google Sheets > Extensions > Apps Script.');
+  }
 
   // 1. Setup Sheet "Profile" (Key-Value)
   let profileSheet = ss.getSheetByName(SHEET_PROFILE);
@@ -53,7 +90,7 @@ function setupDatabase() {
     ['Github', 'https://github.com'],
     ['Linkedin', 'https://linkedin.com'],
     ['Instagram', 'https://instagram.com'],
-    ['Admin_Passcode', 'admin123'] // Ganti passcode ini sesuai kebutuhan keamanan Anda
+    ['Admin_Passcode', 'admin123'] // Passcode default untuk dashboard admin
   ];
   profileSheet.getRange(2, 1, defaultProfile.length, 2).setValues(defaultProfile);
   profileSheet.autoResizeColumns(1, 2);
@@ -127,7 +164,7 @@ function setupDatabase() {
       'Budi Santoso',
       'budi.santoso@example.com',
       'Tawaran Proyek Website E-Commerce',
-      'Halo Mas Rizky, kami tertarik untuk berdiskusi tentang pembuatan platform web e-commerce custom. Mohon info waktu untuk meeting online.'
+      'Halo Mas Rizky, kami tertarik untuk berdiskusi tentang pembuatan platform web e-commerce custom.'
     ]
   ];
   messagesSheet.getRange(2, 1, sampleMessages.length, messageHeaders[0].length).setValues(sampleMessages);
@@ -147,9 +184,19 @@ function doGet(e) {
   const action = params.action;
   const page = params.page;
 
+  // Endpoint Cek Status / Ping API
+  if (action === 'ping') {
+    return createJsonResponse({
+      status: 'success',
+      message: 'Google Apps Script Web App Aktif & Terhubung!',
+      timestamp: new Date().toISOString()
+    });
+  }
+
   // 1. API: getPublicData (Data publik untuk profil & portofolio pengunjung)
   if (action === 'getPublicData') {
     try {
+      ensureDatabase();
       const profile = getPublicProfileData();
       const projects = getProjectsData();
       return createJsonResponse({
@@ -171,6 +218,7 @@ function doGet(e) {
       return createJsonResponse({ status: 'error', message: 'Akses Ditolak: Passcode tidak valid!' });
     }
     try {
+      ensureDatabase();
       const profile = getFullProfileData();
       const projects = getProjectsData();
       const messages = getMessagesData();
@@ -187,7 +235,7 @@ function doGet(e) {
     }
   }
 
-  // 3. Render HTML Page untuk Web App (Google Apps Script Web App Host)
+  // 3. Render HTML Page jika script di-host langsung di Apps Script Web App
   if (page === 'admin') {
     let output;
     try {
@@ -238,6 +286,48 @@ function doPost(e) {
 
     // Routing aksi
     switch (action) {
+      // 0a. Ping
+      case 'ping': {
+        return createJsonResponse({
+          status: 'success',
+          message: 'Google Apps Script Web App Aktif (POST)!',
+          timestamp: new Date().toISOString()
+        });
+      }
+
+      // 0b. Support getPublicData via POST (Sangat berguna jika GET diblokir firewall/CORS)
+      case 'getPublicData': {
+        ensureDatabase();
+        const profile = getPublicProfileData();
+        const projects = getProjectsData();
+        return createJsonResponse({
+          status: 'success',
+          data: {
+            profile: profile,
+            projects: projects
+          }
+        });
+      }
+
+      // 0c. Support getAdminData via POST
+      case 'getAdminData': {
+        if (!verifyAdmin(payload.passcode)) {
+          return createJsonResponse({ status: 'error', message: 'Akses Ditolak: Passcode tidak valid!' });
+        }
+        ensureDatabase();
+        const profile = getFullProfileData();
+        const projects = getProjectsData();
+        const messages = getMessagesData();
+        return createJsonResponse({
+          status: 'success',
+          data: {
+            profile: profile,
+            projects: projects,
+            messages: messages
+          }
+        });
+      }
+
       // 1. Authenticate Admin Login
       case 'login': {
         const inputPasscode = payload.passcode;
@@ -261,6 +351,7 @@ function doPost(e) {
         if (!verifyAdmin(payload.passcode)) {
           return createJsonResponse({ status: 'error', message: 'Akses Ditolak: Passcode tidak valid.' });
         }
+        ensureDatabase();
         const profileData = payload.data || {};
         updateProfileInSheet(profileData);
         return createJsonResponse({
@@ -274,6 +365,7 @@ function doPost(e) {
         if (!verifyAdmin(payload.passcode)) {
           return createJsonResponse({ status: 'error', message: 'Akses Ditolak: Passcode tidak valid.' });
         }
+        ensureDatabase();
         const newProject = payload.data || {};
         const createdProject = addProjectToSheet(newProject);
         return createJsonResponse({
@@ -288,6 +380,7 @@ function doPost(e) {
         if (!verifyAdmin(payload.passcode)) {
           return createJsonResponse({ status: 'error', message: 'Akses Ditolak: Passcode tidak valid.' });
         }
+        ensureDatabase();
         const projectData = payload.data || {};
         const updated = updateProjectInSheet(projectData);
         if (updated) {
@@ -308,6 +401,7 @@ function doPost(e) {
         if (!verifyAdmin(payload.passcode)) {
           return createJsonResponse({ status: 'error', message: 'Akses Ditolak: Passcode tidak valid.' });
         }
+        ensureDatabase();
         const projectId = payload.id;
         const deleted = deleteProjectFromSheet(projectId);
         if (deleted) {
@@ -337,6 +431,7 @@ function doPost(e) {
           });
         }
 
+        ensureDatabase();
         addMessageToSheet(name, email, subject, message);
         return createJsonResponse({
           status: 'success',
@@ -349,6 +444,7 @@ function doPost(e) {
         if (!verifyAdmin(payload.passcode)) {
           return createJsonResponse({ status: 'error', message: 'Akses Ditolak: Passcode tidak valid.' });
         }
+        ensureDatabase();
         const rowIndex = parseInt(payload.rowIndex, 10);
         if (rowIndex && rowIndex >= 2) {
           const ss = getDb();
@@ -382,7 +478,7 @@ function doPost(e) {
  */
 
 /**
- * Membuat output JSON dengan MIME type dan CORS yang tepat.
+ * Membuat output JSON dengan MIME type yang tepat.
  */
 function createJsonResponse(data) {
   return ContentService.createTextOutput(JSON.stringify(data))
@@ -404,6 +500,7 @@ function verifyAdmin(inputPasscode) {
  */
 function getFullProfileData() {
   const ss = getDb();
+  if (!ss) return {};
   const sheet = ss.getSheetByName(SHEET_PROFILE);
   if (!sheet) return {};
 
@@ -434,6 +531,7 @@ function getPublicProfileData() {
  */
 function updateProfileInSheet(newProfileData) {
   const ss = getDb();
+  if (!ss) return;
   let sheet = ss.getSheetByName(SHEET_PROFILE);
   if (!sheet) {
     sheet = ss.insertSheet(SHEET_PROFILE);
@@ -454,10 +552,8 @@ function updateProfileInSheet(newProfileData) {
     if (Object.prototype.hasOwnProperty.call(newProfileData, key)) {
       const val = newProfileData[key];
       if (existingKeys[key]) {
-        // Update baris yang sudah ada
         sheet.getRange(existingKeys[key], 2).setValue(val);
       } else {
-        // Tambah baris baru
         sheet.appendRow([key, val]);
       }
     }
@@ -469,6 +565,7 @@ function updateProfileInSheet(newProfileData) {
  */
 function getProjectsData() {
   const ss = getDb();
+  if (!ss) return [];
   const sheet = ss.getSheetByName(SHEET_PROJECTS);
   if (!sheet) return [];
 
@@ -480,11 +577,10 @@ function getProjectsData() {
 
   for (let i = 1; i < rows.length; i++) {
     const row = rows[i];
-    if (!row[0]) continue; // Lewati jika ID kosong
+    if (!row[0]) continue;
 
     const proj = {};
     headers.forEach((header, index) => {
-      // Normalisasi nama property
       let propName = header;
       if (header === 'image_url') propName = 'image_url';
       else if (header === 'tech_stack') propName = 'tech_stack';
@@ -496,7 +592,7 @@ function getProjectsData() {
     projects.push(proj);
   }
 
-  // Urutkan dari project terbaru (Created_At descending)
+  // Urutkan dari project terbaru
   projects.sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0));
   return projects;
 }
@@ -506,6 +602,7 @@ function getProjectsData() {
  */
 function addProjectToSheet(project) {
   const ss = getDb();
+  if (!ss) return null;
   let sheet = ss.getSheetByName(SHEET_PROJECTS);
   if (!sheet) {
     sheet = ss.insertSheet(SHEET_PROJECTS);
@@ -545,6 +642,7 @@ function addProjectToSheet(project) {
  */
 function updateProjectInSheet(project) {
   const ss = getDb();
+  if (!ss) return false;
   const sheet = ss.getSheetByName(SHEET_PROJECTS);
   if (!sheet) return false;
 
@@ -569,6 +667,7 @@ function updateProjectInSheet(project) {
  */
 function deleteProjectFromSheet(projectId) {
   const ss = getDb();
+  if (!ss) return false;
   const sheet = ss.getSheetByName(SHEET_PROJECTS);
   if (!sheet) return false;
 
@@ -587,6 +686,7 @@ function deleteProjectFromSheet(projectId) {
  */
 function addMessageToSheet(name, email, subject, message) {
   const ss = getDb();
+  if (!ss) return;
   let sheet = ss.getSheetByName(SHEET_MESSAGES);
   if (!sheet) {
     sheet = ss.insertSheet(SHEET_MESSAGES);
@@ -602,6 +702,7 @@ function addMessageToSheet(name, email, subject, message) {
  */
 function getMessagesData() {
   const ss = getDb();
+  if (!ss) return [];
   const sheet = ss.getSheetByName(SHEET_MESSAGES);
   if (!sheet) return [];
 
@@ -614,7 +715,7 @@ function getMessagesData() {
     if (!row[0] && !row[1]) continue;
 
     messages.push({
-      rowIndex: i + 1, // Untuk kemudahan aksi delete
+      rowIndex: i + 1,
       timestamp: row[0] ? String(row[0]) : '',
       name: row[1] || '',
       email: row[2] || '',
@@ -623,7 +724,6 @@ function getMessagesData() {
     });
   }
 
-  // Tampilkan pesan terbaru di paling atas
   messages.reverse();
   return messages;
 }
